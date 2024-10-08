@@ -5,16 +5,41 @@ import {
     ListItem,
     Button,
 } from "@material-tailwind/react";
-import {Outlet, useNavigate} from "react-router-dom";
-import {useState} from "react";
+
+
+import { Outlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { logout } from '../reducer/loginSlice';  // Redux logout action
 
 const BasicLayout = ({children}) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [selectedItem, setSelectedItem] = useState(null); // 선택된 항목 상태 관리
+
+    const loginState = useSelector(state => state.loginSlice);
+
+
+    console.log("loginState:{}",loginState)
 
     const handleNavigation = (path, itemName) => {
         setSelectedItem(itemName); // 선택된 항목 설정
         navigate(path); // 페이지 이동
+    };
+
+    const handleLogout = async () => {
+        try {
+            // 로그아웃 요청
+            await axios.post('http://localhost:8080/admin/logout');
+
+            // 로그아웃 성공 시 로그인 페이지로 리다이렉트
+            dispatch(logout()); // Redux에서 로그아웃 처리
+            navigate('/');
+
+        } catch (error) {
+            console.error("로그아웃 중 오류 발생: ", error);
+        }
     };
 
     return (
@@ -30,13 +55,13 @@ const BasicLayout = ({children}) => {
                     <List className="flex-grow">
                         <ListItem
                             className={`${selectedItem === "상품관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => handleNavigation("/product/list", "상품관리")}
+                            onClick={() => handleNavigation("/dashboard/products/list", "상품관리")}
                         >
                             상품관리
                         </ListItem>
                         <ListItem
                             className={`${selectedItem === "회원관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => handleNavigation("/member/list", "회원관리")}
+                            onClick={() => handleNavigation("/dashboard/members/list", "회원관리")}
                         >
                             회원관리
                         </ListItem>
@@ -85,12 +110,25 @@ const BasicLayout = ({children}) => {
                     </List>
 
                     <div className="mt-4 p-4 flex flex-col items-center">
-                        <Typography variant="h6" color="blue-gray" className="mb-2">
-                            관리자님 환영합니다
-                        </Typography>
-                        <Button color="blue" size="lg" className="mt-2">
-                            로그아웃
-                        </Button>
+                        {loginState.isLogin ? (
+                            <>
+                                <Typography variant="h6" color="blue-gray" className="mb-2">
+                                    {loginState.name}님 환영합니다
+                                </Typography>
+                                <Button color="blue" size="lg" className="mt-2" onClick={handleLogout}>
+                                    로그아웃
+                                </Button>
+                            </>
+                        ) : (
+                            <Button
+                                color="blue"
+                                size="lg"
+                                className="mt-2"
+                                onClick={() => navigate('/')}
+                            >
+                                로그인
+                            </Button>
+                        )}
                     </div>
                 </Card>
 

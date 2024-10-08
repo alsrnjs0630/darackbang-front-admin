@@ -1,27 +1,31 @@
-import {Suspense, lazy} from "react";
-import {createBrowserRouter} from "react-router-dom";
+import { Suspense, lazy } from "react";
+import { createBrowserRouter } from "react-router-dom";
 import BasicLayout from "../layouts/BasicLayout";
+import LoginPage from "../pages/login/LoginPage";
+import productsRouter from "./productsRouter";
+import membersRouter from "./membersRouter";
 
-const Loading = <div>Loading...</div> // 로딩 문구
-const ProductList = lazy(() => import("../pages/product/list")) // 일단 메인페이지로 상품관리 페이지 설정
-const MemberList = lazy(() => import("../pages/member/list"))
+const Loading = <div>Loading...</div>; // 로딩 문구
 
-const root = createBrowserRouter([ // 각 페이지 경로에 맞는 컴포넌트를 렌더링할 수 있도록 함.
+const root = createBrowserRouter([
     {
-        path: "/",
+        path: "/", // Login page route without BasicLayout
+        element: <Suspense fallback={Loading}><LoginPage /></Suspense>,
+    },
+    {
+        path: "/dashboard", // Main application after login, with BasicLayout
         element: <Suspense fallback={Loading}><BasicLayout /></Suspense>,
         children: [
             {
-                path: "/member/list",
-                element: <Suspense fallback={Loading}><MemberList /></Suspense>
+                path: "products",
+                children: productsRouter(),
             },
             {
-                path: "/product/list",
-                element: <Suspense fallback={Loading}><ProductList /></Suspense>
-            }
-        ]
-    }
-
+                path: "members",
+                children: membersRouter(),
+            },
+        ],
+    },
 ]);
 
 export default root;

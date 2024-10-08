@@ -1,0 +1,22 @@
+.dragging-over {
+    border-color: #1d4ed8;
+    background-color: rgba(29, 78, 216, 0.1);
+}
+
+.dragging {
+    transform: scale(1.05);
+    border-color: #1d4ed8;
+}
+
+.drag-active {
+    background-color: rgba(29, 78, 216, 0.1);
+    border-color: #1d4ed8;
+}
+
+.preview {
+    transition: transform 0.3s ease-in-out;
+}
+
+.preview:hover {
+    transform: scale(1.1);
+}
