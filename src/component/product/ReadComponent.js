@@ -191,6 +191,7 @@ const ReadComponent = ({id}) => {
             if (file instanceof File) {
                 console.log(`파일 추가 (File ${sequenceNumber}):`, file.name);
                 formData.append("descFiles", file, `${sequenceNumber}_${file.name}`);
+
             } else {
                 productImages.push(
                     {

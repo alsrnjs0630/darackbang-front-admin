@@ -13,7 +13,7 @@ const initState = {
     nextPage: 0,
     totalPage: 0,
     currentPage: 0,
-    search:null
+    search: null
 }
 
 
@@ -97,14 +97,14 @@ const ListComponent = () => {
                     >
                         <option value="userEmail">사용자이메일</option>
                         <option value="name">이름</option>
-                        <option value="gender">성별(M/F)</option>
+                        <option value="gender">성별</option>
                         <option value="phoneNo">핸드폰번호(숫자)</option>
-                        <option value="isBlacklist">블랙리스트(true/false)</option>
-                        <option value="memberState">회원상태(01: 정상, 02:탈퇴)</option>
+                        <option value="isBlacklist">블랙리스트</option>
+                        <option value="memberState">회원상태</option>
                     </select>
 
                     {/* Input field that changes based on selected search type */}
-                    {searchType === "userEmail" || searchType === "name" || searchType === "gender" ? (
+                    {searchType === "userEmail" || searchType === "name" ? (
                         <input
                             type="text"
                             placeholder={`${searchType === "userEmail" ? "이메일 입력" : searchType === "name" ? "이름 입력" : "성별 입력"}`}
@@ -120,6 +120,16 @@ const ListComponent = () => {
                             onChange={(e) => setSearchValue(e.target.value)}
                             className="border px-2 py-1 rounded"
                         />
+                    ) : searchType === "gender" ? (
+                        <select
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            className="border px-2 py-1 rounded"
+                        >
+                            <option value="">선택</option>
+                            <option value="M">남자</option>
+                            <option value="F">여자</option>
+                        </select>
                     ) : searchType === "isBlacklist" ? (
                         <select
                             value={searchValue}
@@ -127,8 +137,8 @@ const ListComponent = () => {
                             className="border px-2 py-1 rounded"
                         >
                             <option value="">선택</option>
-                            <option value="true">True</option>
-                            <option value="false">False</option>
+                            <option value="1">예</option>
+                            <option value="0">아니요</option>
                         </select>
                     ) : searchType === "memberState" ? (
                         <select
@@ -137,8 +147,9 @@ const ListComponent = () => {
                             className="border px-2 py-1 rounded"
                         >
                             <option value="">선택</option>
-                            <option value="01">01: 정상</option>
-                            <option value="02">02: 탈퇴</option>
+                            <option value="01">활동중</option>
+                            <option value="02">탈퇴</option>
+                            <option value="03">탈퇴대기</option>
                         </select>
                     ) : null}
 
@@ -152,42 +163,50 @@ const ListComponent = () => {
             </div>
 
 
-            {/* Header 부분 */}
+            {/* Header 부분 */
+            }
             <div className="p-4 bg-blue-500 text-white">
-                <div className="grid grid-cols-7 gap-4 font-bold">
+                <div className="grid grid-cols-8 gap-4 font-bold">
                     <span>회원번호</span>
                     <span>회원아이디</span>
                     <span>회원명</span>
                     <span>성별</span>
+                    <span>블랙컨슈머유무</span>
                     <span>회원상태</span>
                     <span>생성일</span>
                     <span>수정일</span>
                 </div>
             </div>
 
-            {/* Product 리스트 부분 */}
-            {serverData.contents.map((member) => (
-                <div
-                    key={member.id}
-                    className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
-                    onClick={() => moveToRead(member.id)}
-                >
-                    <div className="grid grid-cols-7 gap-4">
-                        <span>{member.id}</span>
-                        <span>{member.userEmail}</span>
-                        <span>{member.name}</span>
-                        <span>{member.gender}</span>
-                        <span>{member.memberState}</span>
-                        <span>{formatDate(member.createdDate)}</span>
-                        <span>{formatDate(member.updatedDate)}</span>
+            {/* Product 리스트 부분 */
+            }
+            {
+                serverData.contents.map((member) => (
+                    <div
+                        key={member.id}
+                        className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
+                        onClick={() => moveToRead(member.id)}
+                    >
+                        <div className="grid grid-cols-8 gap-4">
+                            <span>{member.id}</span>
+                            <span>{member.userEmail}</span>
+                            <span>{member.name}</span>
+                            <span>{member.gender}</span>
+                            <span>{member.isBlacklist === true ? "예" : "아니오"}</span>
+                            <span>{member.memberState}</span>
+                            <span>{formatDate(member.createdDate)}</span>
+                            <span>{formatDate(member.updatedDate)}</span>
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))
+            }
 
-            {/* Pagination 컴포넌트 */}
+            {/* Pagination 컴포넌트 */
+            }
             <PageComponent serverData={serverData} movePage={moveToList}></PageComponent>
         </div>
-    );
+    )
+        ;
 }
 
 export default ListComponent;
