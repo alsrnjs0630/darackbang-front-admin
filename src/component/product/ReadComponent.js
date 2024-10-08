@@ -32,7 +32,7 @@ const  initState ={
     isSoldout: false,
     nutrition: "",
     quantity: "",
-    packageQuantity: "",
+    packageQuantity:"",
     expirationDate: "",
     manufactureDate: "",
     isGmo: false,
@@ -158,11 +158,12 @@ const ReadComponent = ({id}) => {
 
 
         Object.keys(product).forEach((key) => {
-            // Exclude specific keys
-            if (!['productImages', 'createdDate', 'updatedDate'].includes(key)) {
+            // Exclude specific keys and null values
+            if (!['productImages', 'createdDate', 'updatedDate'].includes(key) && product[key] !== null) {
                 formData.append(key, product[key]);
             }
         });
+
 
 
         // Process main product images
@@ -443,6 +444,7 @@ const ReadComponent = ({id}) => {
                             type="number"
                             value={product.quantity}
                             onChange={handleInputChange}
+                            required
                         />
                     </div>
 
