@@ -321,7 +321,7 @@ const ReadComponent = ({id}) => {
                 </DialogFooter>
             </Dialog>
 
-            <div className="bg-white p-10 w-11/12 max-w-5xl mx-auto">
+            <div className="bg-white p-7 rounded w-9/12 mx-auto">
                 <form onSubmit={handleSubmit}>
                     <h2 className="text-lg font-semibold mb-4">사용자 기본 정보</h2>
                     {/* 기본 사용자 정보 섹션 */}
@@ -426,7 +426,7 @@ const ReadComponent = ({id}) => {
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="w-1/5">
-                            <Button className="w-full bg-blue-600 text-white"  onClick={handleSearch2}>검색</Button>
+                            <Button className="w-full bg-blue-600 text-white" onClick={handleSearch2}>검색</Button>
                         </div>
                     </div>
 
@@ -437,7 +437,8 @@ const ReadComponent = ({id}) => {
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="w-1/4">
-                            <Input label="추가 우편번호" name="addPostNo" value={member.addPostNo}  onChange={handleInputChange}/>
+                            <Input label="추가 우편번호" name="addPostNo" value={member.addPostNo}
+                                   onChange={handleInputChange}/>
                         </div>
                         <div className="w-1/5">
                             <Button className="w-full bg-blue-600 text-white" onClick={handleSearch3}>검색</Button>
@@ -446,7 +447,8 @@ const ReadComponent = ({id}) => {
                     {/* Submit and Action Buttons */}
                     <div className="flex justify-center mt-8 space-x-6">
                         <div className="w-1/5">
-                            <Button type="submit" className="w-full text-white rounded bg-blue-500" onClick={handleSubmit}>
+                            <Button type="submit" className="w-full text-white rounded bg-blue-500"
+                                    onClick={handleSubmit}>
                                 수정
                             </Button>
                         </div>
@@ -483,7 +485,7 @@ const ReadComponent = ({id}) => {
                                         onClick={handleWithdraw}>
                                     탈퇴처리
                                 </Button>
-                            ) }
+                            )}
                         </div>
                     </div>
                 </form>
