@@ -72,6 +72,19 @@ const BasicLayout = ({children}) => {
                             구매관리
                         </ListItem>
                         <ListItem
+                            className={`${selectedItem === "결제관리" ? "bg-gray-200 font-bold" : ""}`}
+                            onClick={() => handleNavigation("/dashboard/payments/list", "결제관리")}
+                        >
+                            결제관리
+                        </ListItem>
+            {/*            <ListItem
+                            className={`${selectedItem === "공지사항관리" ? "bg-gray-200 font-bold" : ""}`}
+                            onClick={() => setSelectedItem("공지사항관리")}
+                        >
+                            공지사항관리
+                        </ListItem>
+
+                        <ListItem
                             className={`${selectedItem === "Q&A관리" ? "bg-gray-200 font-bold" : ""}`}
                             onClick={() => setSelectedItem("Q&A관리")}
                         >
@@ -82,30 +95,12 @@ const BasicLayout = ({children}) => {
                             onClick={() => setSelectedItem("이벤트관리")}
                         >
                             이벤트관리
-                        </ListItem>
-                        <ListItem
-                            className={`${selectedItem === "공지사항관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => setSelectedItem("공지사항관리")}
-                        >
-                            공지사항관리
-                        </ListItem>
-                        <ListItem
-                            className={`${selectedItem === "결제관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => setSelectedItem("결제관리")}
-                        >
-                            결제관리
-                        </ListItem>
+                        </ListItem>*/}
                         <ListItem
                             className={`${selectedItem === "매출통계관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => setSelectedItem("매출통계관리")}
+                            onClick={() => handleNavigation("/dashboard/statistics/list", "매출통계관리")}
                         >
                             매출통계관리
-                        </ListItem>
-                        <ListItem
-                            className={`${selectedItem === "공통관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => setSelectedItem("공통관리")}
-                        >
-                            공통관리
                         </ListItem>
                     </List>
 

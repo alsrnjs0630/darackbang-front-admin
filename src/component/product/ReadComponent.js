@@ -354,7 +354,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="상품 유형"
                             name="type"
-                            value={product.type}
+                            value={product.type==="null"?"":product.type}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -365,7 +365,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="상품 설명"
                             name="productDetail"
-                            value={product.productDetail}
+                            value={product.productDetail==="null"?"":product.productDetail}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -376,7 +376,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="제조사"
                             name="manufacture"
-                            value={product.manufacture}
+                            value= {product.manufacture==="null"?"":product.manufacture}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -386,7 +386,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="브랜드"
                             name="brand"
-                            value={product.brand}
+                            value={product.brand==="null"?"":product.brand}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -396,7 +396,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="원산지"
                             name="origin"
-                            value={product.origin}
+                            value={product.origin==="null"?"":product.origin}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -406,7 +406,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="재질"
                             name="material"
-                            value={product.material}
+                            value={product.material==="null"?"":product.material}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -416,7 +416,7 @@ const ReadComponent = ({id}) => {
                         <Select
                             label="카테고리"
                             name="category"
-                            value={product.category}
+                            value={product.category} // Bind the value directly to product.category
                             onChange={(e) => setProduct({ ...product, category: e })}
                             className="w-full px-3 py-2 border rounded"
                         >
@@ -431,7 +431,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="판매사"
                             name="saleCompany"
-                            value={product.saleCompany}
+                            value={product.saleCompany==="null"?"":product.saleCompany}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -442,7 +442,7 @@ const ReadComponent = ({id}) => {
                             label="수량"
                             name="quantity"
                             type="number"
-                            value={product.quantity}
+                            value={product.quantity==="null"?"":product.quantity}
                             onChange={handleInputChange}
                             required
                         />
@@ -454,7 +454,7 @@ const ReadComponent = ({id}) => {
                             label="패키지 수량"
                             name="packageQuantity"
                             type="number"
-                            value={product.packageQuantity}
+                            value={product.packageQuantity==="null"?"":product.packageQuantity}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -465,7 +465,7 @@ const ReadComponent = ({id}) => {
                             label="유통기한"
                             name="expirationDate"
                             type="date"
-                            value={product.expirationDate}
+                            value={product.expirationDate==="null"?"":product.expirationDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -476,7 +476,7 @@ const ReadComponent = ({id}) => {
                             label="제조일자"
                             name="manufactureDate"
                             type="date"
-                            value={product.manufactureDate}
+                            value={product.manufactureDate==="null"?"":product.manufactureDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -524,7 +524,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="용량 (ml)"
                             name="volume"
-                            value={product.volume}
+                            value={product.volume==="null"?"":product.volume}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -533,7 +533,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="주의 사항"
                             name="caution"
-                            value={product.caution}
+                            value= {product.caution==="null"?"":product.caution}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -542,7 +542,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="영양 정보"
                             name="nutrition"
-                            value={product.nutrition}
+                            value= {product.nutrition==="null"?"":product.nutrition}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -554,7 +554,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="판매사 정보"
                             name="saleCompanyInfo"
-                            value={product.saleCompanyInfo}
+                            value=  {product.saleCompanyInfo==="null"?"":product.saleCompanyInfo}
                             onChange={handleInputChange}
                         />
                     </div>

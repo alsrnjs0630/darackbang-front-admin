@@ -66,6 +66,17 @@ const ListComponent = () => {
         });
     };
 
+
+    const formatDate = (date) => new Date(date).toLocaleString('ko-KR', {
+        timeZone: 'Asia/Seoul',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    });
+
     return (
         <div className={'border-2 border-blue-100 mt-10 mr-2 ml-2'}>
             <div className="flex justify-between items-center w-full p-4">
@@ -147,12 +158,12 @@ const ListComponent = () => {
                     <div className="grid grid-cols-8 gap-4">
                         <span>{product.pno}</span>
                         <span>{product.productName}</span>
-                        <span>{product.retailPrice}</span>
-                        <span>{product.salePrice}</span>
+                        <span>{`${product.retailPrice.toLocaleString()}원`}</span>
+                        <span>{`${product.salePrice.toLocaleString()}원`}</span>
                         <span>{product.category}</span>
                         <span>{product.quantity}</span>
-                        <span>{product.createdDate}</span>
-                        <span>{product.updatedDate}</span>
+                        <span>{formatDate(product.createdDate)}</span>
+                        <span>{formatDate(product.updatedDate)}</span>
                     </div>
                 </div>
             ))}

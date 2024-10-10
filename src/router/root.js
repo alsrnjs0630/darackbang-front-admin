@@ -5,6 +5,8 @@ import LoginPage from "../pages/login/LoginPage";
 import productsRouter from "./productsRouter";
 import membersRouter from "./membersRouter";
 import ordersRouter from "./ordersRouter";
+import paymentsRouter from "./paymentsRouter";
+import statisticsRouter from "./statisticsRouter";
 
 const Loading = <div>Loading...</div>; // 로딩 문구
 
@@ -28,6 +30,14 @@ const root = createBrowserRouter([
             {
                 path: "orders",
                 children: ordersRouter(),
+            },
+            {
+                path: "payments",
+                children: paymentsRouter(),
+            },
+            {
+                path: "statistics",
+                children: statisticsRouter(),
             },
         ],
     },
