@@ -8,8 +8,8 @@ const prefix = `${API_SERVER_HOST}/admin/orders`;
  * @returns {Promise<any>}
  */
 export const getList = async (pageParam) => {
-    const {page, size,userEmail, name,gender,phoneNo,isBlacklist ,memberState} = pageParam
-    const res = await axios.get(`${prefix}/list`,{params:{page:page,size:size, userEmail:userEmail,name:name ,gender:gender ,phoneNo:phoneNo ,isBlacklist:isBlacklist ,memberState:memberState }});
+    const {page, size,totalOrderPrice, userEmail,name} = pageParam
+    const res = await axios.get(`${prefix}/list`,{params:{page:page,size:size, totalOrderPrice:totalOrderPrice,userEmail:userEmail ,name:name }});
     return res.data;
 }
 

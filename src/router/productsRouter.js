@@ -26,10 +26,6 @@ const productsRouter = () => {
             path: "create",
             element: <Suspense fallback={Loading}><ProductsCreate/></Suspense>
         },
-/*        {
-            path: "modify/:pno",
-            element: <Suspense fallback={Loading}><ProductsModify/></Suspense>
-        },*/
     ]
 }
 

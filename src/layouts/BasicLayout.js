@@ -67,7 +67,7 @@ const BasicLayout = ({children}) => {
                         </ListItem>
                         <ListItem
                             className={`${selectedItem === "구매관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => setSelectedItem("구매관리")}
+                            onClick={() => handleNavigation("/dashboard/orders/list", "구매관리")}
                         >
                             구매관리
                         </ListItem>

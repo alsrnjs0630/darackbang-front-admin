@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import useCustomMove from "../hooks/useCustomMove";
-import {getList} from "../../api/memberApi";
+import {getList} from "../../api/orderApi";
 import PageComponent from "../common/PageComponent";
 
 const initState = {
@@ -34,16 +34,14 @@ const ListComponent = () => {
         const params = {
             page,
             size,
+            totalOrderPrice: searchType === "totalOrderPrice" ? searchValue : null,
             userEmail: searchType === "userEmail" ? searchValue : null,
             name: searchType === "name" ? searchValue : null,
-            gender: searchType === "gender" ? searchValue : null,
-            phoneNo: searchType === "phoneNo" ? searchValue : null,
-            isBlacklist: searchType === "isBlacklist" ? searchValue : null,
-            memberState: searchType === "memberState" ? searchValue : null
         };
 
         getList(params).then(data => {
             setServerData(data);
+            console.log("Search results:", data); // Output the data to console
         }).catch(error => {
             // handle exception here if needed
         });
@@ -54,12 +52,9 @@ const ListComponent = () => {
         const params = {
             page,
             size,
+            totalOrderPrice: searchType === "totalOrderPrice" ? searchValue : null,
             userEmail: searchType === "userEmail" ? searchValue : null,
             name: searchType === "name" ? searchValue : null,
-            gender: searchType === "gender" ? searchValue : null,
-            phoneNo: searchType === "phoneNo" ? searchValue : null,
-            isBlacklist: searchType === "isBlacklist" ? searchValue : null,
-            memberState: searchType === "memberState" ? searchValue : null
         };
 
         // Call getList API when the search button is clicked
@@ -95,63 +90,21 @@ const ListComponent = () => {
                         }}
                         className="border px-2 py-1 rounded"
                     >
-                        <option value="userEmail">사용자이메일</option>
-                        <option value="name">이름</option>
-                        <option value="gender">성별</option>
-                        <option value="phoneNo">핸드폰번호(숫자)</option>
-                        <option value="isBlacklist">블랙리스트</option>
-                        <option value="memberState">회원상태</option>
+                        <option value="totalOrderPrice">총구매액</option>
+                        <option value="userEmail">로그인아이디</option>
+                        <option value="name">구매자명</option>
                     </select>
 
                     {/* Input field that changes based on selected search type */}
-                    {searchType === "userEmail" || searchType === "name" ? (
+                    {searchType === "totalOrderPrice" || searchType === "userEmail"|| searchType === "name" ? (
                         <input
                             type="text"
-                            placeholder={`${searchType === "userEmail" ? "이메일 입력" : searchType === "name" ? "이름 입력" : "성별 입력"}`}
+                            placeholder={`${searchType === "totalOrderPrice" ? "구매액" : searchType === "name" ? "로그인아이디" : "구매자명"}`}
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             className="border px-2 py-1 rounded"
                         />
-                    ) : searchType === "phoneNo" ? (
-                        <input
-                            type="number"
-                            placeholder="핸드폰번호 입력"
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            className="border px-2 py-1 rounded"
-                        />
-                    ) : searchType === "gender" ? (
-                        <select
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            className="border px-2 py-1 rounded"
-                        >
-                            <option value="">선택</option>
-                            <option value="M">남자</option>
-                            <option value="F">여자</option>
-                        </select>
-                    ) : searchType === "isBlacklist" ? (
-                        <select
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            className="border px-2 py-1 rounded"
-                        >
-                            <option value="">선택</option>
-                            <option value="1">예</option>
-                            <option value="0">아니요</option>
-                        </select>
-                    ) : searchType === "memberState" ? (
-                        <select
-                            value={searchValue}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            className="border px-2 py-1 rounded"
-                        >
-                            <option value="">선택</option>
-                            <option value="01">활동중</option>
-                            <option value="02">탈퇴</option>
-                            <option value="03">탈퇴대기</option>
-                        </select>
-                    ) : null}
+                    ):null}
 
                     <button
                         onClick={handleSearch}
@@ -166,13 +119,12 @@ const ListComponent = () => {
             {/* Header 부분 */
             }
             <div className="p-4 bg-blue-500 text-white">
-                <div className="grid grid-cols-8 gap-4 font-bold">
-                    <span>회원번호</span>
-                    <span>회원아이디</span>
-                    <span>회원명</span>
-                    <span>성별</span>
-                    <span>블랙컨슈머유무</span>
-                    <span>회원상태</span>
+                <div className="grid grid-cols-7 gap-4 font-bold">
+                    <span>주문번호</span>
+                    <span>총구매액</span>
+                    <span>주문일</span>
+                    <span>회원로그인아이디</span>
+                    <span>구매자명</span>
                     <span>생성일</span>
                     <span>수정일</span>
                 </div>
@@ -181,21 +133,20 @@ const ListComponent = () => {
             {/* Product 리스트 부분 */
             }
             {
-                serverData.contents.map((member) => (
+                serverData.contents.map((order) => (
                     <div
-                        key={member.id}
+                        key={order.id}
                         className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
-                        onClick={() => moveToRead(member.id)}
+                        onClick={() => moveToRead(order.id)}
                     >
-                        <div className="grid grid-cols-8 gap-4">
-                            <span>{member.id}</span>
-                            <span>{member.userEmail}</span>
-                            <span>{member.name}</span>
-                            <span>{member.gender}</span>
-                            <span>{member.isBlacklist === true ? "예" : "아니오"}</span>
-                            <span>{member.memberState}</span>
-                            <span>{formatDate(member.createdDate)}</span>
-                            <span>{formatDate(member.updatedDate)}</span>
+                        <div className="grid grid-cols-7 gap-4">
+                            <span>{order.id}</span>
+                            <span>{order.totalOrderPrice}</span>
+                            <span>{order.orderDate}</span>
+                            <span>{order.member.userEmail}</span>
+                            <span>{order.member.name}</span>
+                            <span>{formatDate(order.createdDate)}</span>
+                            <span>{formatDate(order.updatedDate)}</span>
                         </div>
                     </div>
                 ))

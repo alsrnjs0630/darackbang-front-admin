@@ -4,6 +4,7 @@ import BasicLayout from "../layouts/BasicLayout";
 import LoginPage from "../pages/login/LoginPage";
 import productsRouter from "./productsRouter";
 import membersRouter from "./membersRouter";
+import ordersRouter from "./ordersRouter";
 
 const Loading = <div>Loading...</div>; // 로딩 문구
 
@@ -23,6 +24,10 @@ const root = createBrowserRouter([
             {
                 path: "members",
                 children: membersRouter(),
+            },
+            {
+                path: "orders",
+                children: ordersRouter(),
             },
         ],
     },
