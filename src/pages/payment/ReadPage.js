@@ -1,6 +1,6 @@
 // ListPage.js
 import React from "react";
-import ReadComponent from "../../component/order/ReadComponent";
+import ReadComponent from "../../component/payment/ReadComponent";
 import {useParams} from "react-router-dom";
 
 const ReadPage = () => {
@@ -9,7 +9,7 @@ const ReadPage = () => {
 
     return (
         <div>
-            <h1 className="text-3xl font-bold text-center mt-4">다락방 주문 상세 정보</h1>
+            <h1 className="text-3xl font-bold text-center mt-4">다락방 결제 상세 정보</h1>
             <ReadComponent id={id} />
         </div>
     );
