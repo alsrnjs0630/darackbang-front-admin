@@ -1,28 +1,18 @@
 import {Suspense, lazy} from "react";
-import {Navigate} from "react-router-dom";
 
 const Loading = <div>Loading...</div>
 
-const StatisticsList = lazy(() => import("../pages/statistic/ListPage"))
-const StatisticsRead = lazy(() => import("../pages/statistic/ReadPage"))
+const Statistics = lazy(() => import("../pages/statistic/StatisticPage"))
 
 //const ProductsModify = lazy(() => import("../pages/products/ModifyPage"))
 
-const ordersRouter = () => {
+const statisticsRouter = () => {
     return [
         {
-            path: "list",
-            element: <Suspense fallback={Loading}><StatisticsList/></Suspense>
+            path: "all",
+            element: <Suspense fallback={Loading}><Statistics/></Suspense>
         },
-        {
-            path: "",
-            element: <Navigate replace to="list"/>
-        },
-        {
-            path: "read/:id",
-            element: <Suspense fallback={Loading}><StatisticsRead/></Suspense>
-        }
     ]
 }
 
-export default ordersRouter;
+export default statisticsRouter;

@@ -92,7 +92,6 @@ const ListComponent = () => {
                         }}
                         className="border px-2 py-1 rounded"
                     >
-                        <option value="">선택</option>
                         <option value="buyerName">구매자명</option>
                         <option value="pgProvider">결제수단</option>
                         <option value="paidAmount">구매액</option>
@@ -100,10 +99,10 @@ const ListComponent = () => {
                     </select>
 
                     {/* Input field that changes based on selected search type */}
-                    {searchType === "paidAmount" || searchType === "buyerName" ? (
+                    {searchType === "buyerName" || searchType === "paidAmount" ? (
                         <input
                             type="text"
-                            placeholder={`${searchType === "paidAmount" ? "구매액" : "구매자명"}`}
+                            placeholder={`${searchType === "paidAmount" ? "구매자명" : "구매액"}`}
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             className="border px-2 py-1 rounded"

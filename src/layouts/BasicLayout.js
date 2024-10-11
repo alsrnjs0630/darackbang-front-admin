@@ -98,7 +98,7 @@ const BasicLayout = ({children}) => {
                         </ListItem>*/}
                         <ListItem
                             className={`${selectedItem === "매출통계관리" ? "bg-gray-200 font-bold" : ""}`}
-                            onClick={() => handleNavigation("/dashboard/statistics/list", "매출통계관리")}
+                            onClick={() => handleNavigation("/dashboard/statistics/all", "매출통계관리")}
                         >
                             매출통계관리
                         </ListItem>
