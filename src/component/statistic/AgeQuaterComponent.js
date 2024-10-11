@@ -1,7 +1,7 @@
 import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 
-import {getAgeGroupMonthStat, getAgeGroupQuarterStat, getProductQuarterStat} from "../../api/statisticApi";
+import { getAgeGroupQuarterStat} from "../../api/statisticApi";
 
 
 const AgeQuarterComponent = () => {
