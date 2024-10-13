@@ -17,12 +17,14 @@ export const loginSlice  = createSlice({
 
             state.name = action.payload.nickname;
             state.email = action.payload.email;
+            state.roleNames = action.payload.roleNames;
             state.isLoading = true;
             state.isLogin = true;
         },
         logout:(state, action) => {
             state.name ="";
             state.email = "";
+            state.roleNames =[];
             state.isLoading = false;
             state.isLogin = false;
         }

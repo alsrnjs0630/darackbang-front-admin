@@ -2,8 +2,8 @@ import {useEffect, useState} from "react";
 import useCustomMove from "../hooks/useCustomMove";
 import {getList} from "../../api/productApi";
 import PageComponent from "../common/PageComponent";
-import {useSearchParams} from "react-router-dom";
-import axios from "axios";
+import useCustomLogin from "../hooks/useCustomLogin";
+
 
 const initState = {
     contents: [],
@@ -21,7 +21,7 @@ const initState = {
 
 const ListComponent = () => {
 
-    //const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandle} = useCustomLogin()
 
     const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
 
@@ -41,10 +41,14 @@ const ListComponent = () => {
 
 
         getList(params).then(data => {
+
+            console.log("데이터:{}",data)
             setServerData(data);
+
         }).catch(error => {
-            // handle exception here if needed
+            exceptionHandle(error)
         });
+
     }, [page, size, refresh, searchValue, searchType]);
 
 
@@ -62,7 +66,7 @@ const ListComponent = () => {
             setServerData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            console.error("Error fetching the list: ", error);
+            exceptionHandle(error);
         });
     };
 

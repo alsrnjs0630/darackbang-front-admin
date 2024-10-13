@@ -8,6 +8,7 @@ import {
 import {getOne} from "../../api/paymentApi"
 
 import useCustomMove from "../hooks/useCustomMove";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const initState = {
     id: null,
@@ -75,6 +76,8 @@ const initState = {
 
 const ReadComponent = ({id}) => {
 
+    const {exceptionHandle} = useCustomLogin()
+
     const {page, size, refresh, moveToList} = useCustomMove()
 
     const [payment, setPayment] = useState(initState);
@@ -83,7 +86,9 @@ const ReadComponent = ({id}) => {
         getOne(id).then(data => {
             console.log("결제 정보:{}", data);
             setPayment(data);
-        })
+        }).catch(error => {
+            exceptionHandle(error)
+        });
 
     }, [id])
 

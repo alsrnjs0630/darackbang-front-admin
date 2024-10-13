@@ -2,9 +2,13 @@
 import React, {useState} from "react";
 import {useDropzone} from "react-dropzone";
 import '../../pages/product/ProductList.css'; // Add your custom CSS
-import axios from "axios";
+import {
+ create
+} from "../../api/productApi";
 import useCustomMove from "../hooks/useCustomMove";
 import {Input, Textarea, Select, Option} from "@material-tailwind/react";
+import { Dialog, DialogHeader, DialogBody, DialogFooter, Button } from "@material-tailwind/react";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const CreateComponent = () => {
     const [product, setProduct] = useState({
@@ -34,6 +38,8 @@ const CreateComponent = () => {
         wishCount: ""
     });
 
+    const {exceptionHandle} = useCustomLogin()
+
     const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
     // Other state variables
     const [files, setFiles] = useState([]);
@@ -42,6 +48,26 @@ const CreateComponent = () => {
     const [mainFileDropping, setMainFileDropping] = useState(null);
     const [descFileDragging, setDescFileDragging] = useState(null);
     const [descFileDropping, setDescFileDropping] = useState(null);
+
+// 모달 상태 관리
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onCloseCallback, setOnCloseCallback] = useState(null); // 모달 닫힐 때 실행할 콜백
+
+    const openModal = (message, callback = null) => {
+        setModalMessage(message);
+        setModalOpen(true);
+        setOnCloseCallback(() => callback); // 콜백을 저장
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        if (onCloseCallback) {
+            onCloseCallback(); // 콜백 함수 실행 (있을 경우)
+            setOnCloseCallback(null); // 콜백 초기화
+        }
+    };
+
 
     const humanFileSize = (size) => {
         const i = Math.floor(Math.log(size) / Math.log(1024));
@@ -156,7 +182,7 @@ const CreateComponent = () => {
 
                 console.log(field.label)
 
-                alert(field.label+`is required!`);
+                openModal(`${field.label}을(를) 입력해야 합니다!`);
 
 
                 const inputElement = document.getElementsByName(field.name);
@@ -173,13 +199,13 @@ const CreateComponent = () => {
 
         // Check if at least one main product image is uploaded
         if (files.length === 0) {
-            alert("상품이미지는 하나 이상 있어야 합니다.!");
+            openModal("상품이미지는 하나 이상 있어야 합니다.!");
             return; // Stop form submission if no images are uploaded
         }
 
         // Check if at least one description image is uploaded
         if (descImages.length === 0) {
-            alert("상품 설명 이미지는 하나 이상 있어야 합니다.");
+            openModal("상품 설명 이미지는 하나 이상 있어야 합니다.");
             return; // Stop form submission if no description images are uploaded
         }
 
@@ -197,25 +223,19 @@ const CreateComponent = () => {
             formData.append("descFiles", file, file.name);
         });
 
-        try {
-            const response = await axios.post("http://localhost:8080/admin/products", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }).then(res => {
-                const result = res.data.RESULT;
-                if (result === "SUCCESS") {
-                    alert("Operation was successful!");
-                    moveToList()
-                } else {
-                    alert("Operation failed.");
-                }
-            });
 
-            console.log("Response:", response.data);
-        } catch (error) {
-            console.error("Error uploading product:", error);
-        }
+        create(formData).then(data => {
+            if (data.RESULT === "SUCCESS") {
+                // RESULT가 "SUCCESS"인 경우 모달을 열어서 성공 메시지를 표시
+                openModal("상품이 성공적으로 생성되었습니다!", moveToList);
+            } else {
+                // RESULT가 "SUCCESS"가 아닌 경우 실패 모달 표시
+                openModal("상품 생성에 실패했습니다.");
+            }
+        }).catch(error => {
+            exceptionHandle(error);
+        });
+
     };
 
 
@@ -633,6 +653,17 @@ const CreateComponent = () => {
                 <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">상품등록
                 </button>
             </form>
+
+            {/* 모달 */}
+            <Dialog open={modalOpen} handler={closeModal}>
+                <DialogHeader>알림</DialogHeader>
+                <DialogBody>
+                    {modalMessage}
+                </DialogBody>
+                <DialogFooter>
+                    <Button color="blue" onClick={closeModal}>확인</Button>
+                </DialogFooter>
+            </Dialog>
         </div>
     );
 };

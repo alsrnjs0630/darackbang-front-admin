@@ -1,17 +1,19 @@
 // ListComponent.js
 import React, {useEffect, useState} from "react";
-import { useDropzone } from "react-dropzone";
+import {useDropzone} from "react-dropzone";
 import '../../pages/product/ProductList.css'; // Add your custom CSS
-import { Input, Button, Textarea, Select, Option } from "@material-tailwind/react";
-import {getOne} from "../../api/productApi"
+import {Input, Button, Textarea, Select, Option} from "@material-tailwind/react";
+import {activateProduct, create, updateProduct, deleteProduct, getOne} from "../../api/productApi"
+import {Dialog, DialogHeader, DialogBody, DialogFooter} from "@material-tailwind/react";
 
 import {API_SERVER_HOST} from "../../api/host";
 
 import axios from "axios";
 import useCustomMove from "../hooks/useCustomMove";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 
-const  initState ={
+const initState = {
     id: "",
     pno: "",
     productName: "",
@@ -32,22 +34,21 @@ const  initState ={
     isSoldout: false,
     nutrition: "",
     quantity: "",
-    packageQuantity:"",
+    packageQuantity: "",
     expirationDate: "",
     manufactureDate: "",
     isGmo: false,
     volume: "",
     wishCount: "",
-    productImages:[],
-    createdDate:"",
-    updatedDate:"",
+    productImages: [],
+    createdDate: "",
+    updatedDate: "",
 }
-
 
 
 const ReadComponent = ({id}) => {
 
-    console.log("아이티::::::::::{}",id)
+    console.log("아이티::::::::::{}", id)
 
     const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
     // Other state variables
@@ -59,6 +60,32 @@ const ReadComponent = ({id}) => {
     const [descFileDropping, setDescFileDropping] = useState(null);
 
     const [product, setProduct] = useState(initState);
+
+    const {exceptionHandle} = useCustomLogin()
+
+    // 모달 상태 관리
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalMessage, setModalMessage] = useState("");
+    const [onCloseCallback, setOnCloseCallback] = useState(null); // 모달 닫힐 때 실행할 콜백
+
+
+    const confirmModal = (message, onConfirm) => {
+        openModal(message, onConfirm);
+    };
+
+    const openModal = (message, callback = null) => {
+        setModalMessage(message);
+        setModalOpen(true);
+        setOnCloseCallback(() => callback); // 콜백을 저장
+    };
+
+    const closeModal = () => {
+        setModalOpen(false);
+        if (onCloseCallback) {
+            onCloseCallback(); // 콜백 함수 실행 (있을 경우)
+            setOnCloseCallback(null); // 콜백 초기화
+        }
+    };
 
 
     const humanFileSize = (size) => {
@@ -82,7 +109,7 @@ const ReadComponent = ({id}) => {
 
     const onDrop = (acceptedFiles, type) => {
         const newFiles = acceptedFiles.map((file) =>
-            Object.assign(file, { preview: URL.createObjectURL(file) })
+            Object.assign(file, {preview: URL.createObjectURL(file)})
         );
         if (type === 'main') {
             setFiles([...files, ...newFiles]);
@@ -129,20 +156,20 @@ const ReadComponent = ({id}) => {
         event.dataTransfer.effectAllowed = "move";
     };
 
-    const { getRootProps: getMainDropzoneProps, getInputProps: getMainInputProps } = useDropzone({
+    const {getRootProps: getMainDropzoneProps, getInputProps: getMainInputProps} = useDropzone({
         onDrop: (acceptedFiles) => onDrop(acceptedFiles, 'main'),
-        accept: { "image/*": [] },
+        accept: {"image/*": []},
         multiple: true,
     });
 
-    const { getRootProps: getDescDropzoneProps, getInputProps: getDescInputProps } = useDropzone({
+    const {getRootProps: getDescDropzoneProps, getInputProps: getDescInputProps} = useDropzone({
         onDrop: (acceptedFiles) => onDrop(acceptedFiles, 'desc'),
-        accept: { "image/*": [] },
+        accept: {"image/*": []},
         multiple: true,
     });
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setProduct({
             ...product,
             [name]: value
@@ -163,7 +190,6 @@ const ReadComponent = ({id}) => {
                 formData.append(key, product[key]);
             }
         });
-
 
 
         // Process main product images
@@ -207,26 +233,23 @@ const ReadComponent = ({id}) => {
         // Add productImages array to the form data
         formData.append("productImages", JSON.stringify(productImages));
 
-        try {
-            const response = await axios.put(`${API_SERVER_HOST}/admin/products`, formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }).then(res => {
-                console.log(res.data)
-                const result = res.data.RESULT;
-                if (result === "SUCCESS") {
-                    alert("Operation was successful!");
-                    moveToList()
-                } else {
-                    alert("Operation failed.");
-                }
-            });
 
-            console.log("Response:", response.data);
-        } catch (error) {
-            console.error("Error uploading product:", error);
-        }
+        updateProduct(formData).then(result => {
+
+            console.log(result);
+
+            if (result.RESULT === "SUCCESS") {
+                // RESULT가 "SUCCESS"인 경우 모달을 열어서 성공 메시지를 표시
+                openModal("상품 수정에 성공하였습니다.");
+            } else {
+                // RESULT가 "SUCCESS"가 아닌 경우 실패 모달 표시
+                openModal("상품 수정에 실패했습니다.");
+            }
+
+        }).catch(error => {
+            exceptionHandle(error)
+        });
+
     };
 
 
@@ -239,9 +262,9 @@ const ReadComponent = ({id}) => {
                 .filter((img) => img.productType === "INFO")
                 .map((img) => ({
                     ...img,
-                    name:img.productFileName,
+                    name: img.productFileName,
                     type: "image/*",
-                    size:50000,
+                    size: 50000,
                     preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // Assuming a path where images are served
                     existing: true, // Mark existing images
                 }));
@@ -249,58 +272,60 @@ const ReadComponent = ({id}) => {
                 .filter((img) => img.productType === "DESC")
                 .map((img) => ({
                     ...img,
-                    name:img.productFileName,
+                    name: img.productFileName,
                     type: "image/*",
-                    size:50000,
+                    size: 50000,
                     preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // Assuming a path where images are served
                     existing: true, // Mark existing images
                 }));
 
             setFiles(infoImages);
             setDescImages(descImages);
-        })
+        }).catch(error=>{
+            exceptionHandle(error)
+        });
 
     }, [id])
 
 
-
     // Function to handle delete
     const handleDelete = async () => {
-        if (window.confirm("Are you sure you want to delete this product?")) {
-            try {
-                const response = await axios.delete(`${API_SERVER_HOST}/admin/products/${id}`);
-                if (response.data.RESULT === "SUCCESS") {
-                    alert("Product deleted successfully!");
-                    moveToList(); // Navigate back to the list after deletion
+        confirmModal("정말로 이 상품을 삭제하시겠습니까?", async () => {
+
+            deleteProduct(id).then(result => {
+
+                if (result.RESULT === "SUCCESS") {
+                    openModal("상품 삭제에 성공하였습니다!", moveToList);
                 } else {
-                    alert("Failed to delete the product.");
+                    openModal("상품 삭제에 실패했습니다.");
                 }
-            } catch (error) {
-                console.error("Error deleting product:", error);
-                alert("An error occurred while deleting the product.");
-            }
-        }
+
+            }).catch(error => {
+                exceptionHandle(error)
+            });
+
+        });
     };
 
 
     // Function to handle delete
     const handleActive = async () => {
-        if (window.confirm("Are you sure you want to delete this product?")) {
-            try {
-                const response = await axios.put(`${API_SERVER_HOST}/admin/products/active/${id}`);
-                if (response.data.RESULT === "SUCCESS") {
-                    alert("상품 활성화 성공!");
-                    moveToList(); // Navigate back to the list after deletion
-                } else {
-                    alert("상품 활성화 실패");
-                }
-            } catch (error) {
-                console.error("상품 활성화 실패:", error);
-                alert("상품 활성화 실패");
-            }
-        }
-    };
+        confirmModal("정말로 이 상품을 활성화하시겠습니까?", async () => {
 
+            activateProduct(id).then(result => {
+
+                if (result.RESULT === "SUCCESS") {
+                    openModal("상품 활성화에 성공하였습니다.", moveToList);
+                } else {
+                    openModal("상품 활성화에 실패했습니다.");
+                }
+
+            }).catch(error => {
+                exceptionHandle(error)
+            });
+
+        });
+    };
 
 
     return (
@@ -354,7 +379,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="상품 유형"
                             name="type"
-                            value={product.type==="null"?"":product.type}
+                            value={product.type === "null" ? "" : product.type}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -365,7 +390,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="상품 설명"
                             name="productDetail"
-                            value={product.productDetail==="null"?"":product.productDetail}
+                            value={product.productDetail === "null" ? "" : product.productDetail}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -376,7 +401,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="제조사"
                             name="manufacture"
-                            value= {product.manufacture==="null"?"":product.manufacture}
+                            value={product.manufacture === "null" ? "" : product.manufacture}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -386,7 +411,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="브랜드"
                             name="brand"
-                            value={product.brand==="null"?"":product.brand}
+                            value={product.brand === "null" ? "" : product.brand}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -396,7 +421,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="원산지"
                             name="origin"
-                            value={product.origin==="null"?"":product.origin}
+                            value={product.origin === "null" ? "" : product.origin}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -406,7 +431,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="재질"
                             name="material"
-                            value={product.material==="null"?"":product.material}
+                            value={product.material === "null" ? "" : product.material}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -417,7 +442,7 @@ const ReadComponent = ({id}) => {
                             label="카테고리"
                             name="category"
                             value={product.category} // Bind the value directly to product.category
-                            onChange={(e) => setProduct({ ...product, category: e })}
+                            onChange={(e) => setProduct({...product, category: e})}
                             className="w-full px-3 py-2 border rounded"
                         >
                             <Option value="L01">잎차</Option>
@@ -431,7 +456,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="판매사"
                             name="saleCompany"
-                            value={product.saleCompany==="null"?"":product.saleCompany}
+                            value={product.saleCompany === "null" ? "" : product.saleCompany}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -442,7 +467,7 @@ const ReadComponent = ({id}) => {
                             label="수량"
                             name="quantity"
                             type="number"
-                            value={product.quantity==="null"?"":product.quantity}
+                            value={product.quantity === "null" ? "" : product.quantity}
                             onChange={handleInputChange}
                             required
                         />
@@ -454,7 +479,7 @@ const ReadComponent = ({id}) => {
                             label="패키지 수량"
                             name="packageQuantity"
                             type="number"
-                            value={product.packageQuantity==="null"?"":product.packageQuantity}
+                            value={product.packageQuantity === "null" ? "" : product.packageQuantity}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -465,7 +490,7 @@ const ReadComponent = ({id}) => {
                             label="유통기한"
                             name="expirationDate"
                             type="date"
-                            value={product.expirationDate==="null"?"":product.expirationDate}
+                            value={product.expirationDate === "null" ? "" : product.expirationDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -476,7 +501,7 @@ const ReadComponent = ({id}) => {
                             label="제조일자"
                             name="manufactureDate"
                             type="date"
-                            value={product.manufactureDate==="null"?"":product.manufactureDate}
+                            value={product.manufactureDate === "null" ? "" : product.manufactureDate}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -524,7 +549,7 @@ const ReadComponent = ({id}) => {
                         <Input
                             label="용량 (ml)"
                             name="volume"
-                            value={product.volume==="null"?"":product.volume}
+                            value={product.volume === "null" ? "" : product.volume}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -533,7 +558,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="주의 사항"
                             name="caution"
-                            value= {product.caution==="null"?"":product.caution}
+                            value={product.caution === "null" ? "" : product.caution}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -542,7 +567,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="영양 정보"
                             name="nutrition"
-                            value= {product.nutrition==="null"?"":product.nutrition}
+                            value={product.nutrition === "null" ? "" : product.nutrition}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -554,7 +579,7 @@ const ReadComponent = ({id}) => {
                         <Textarea
                             label="판매사 정보"
                             name="saleCompanyInfo"
-                            value=  {product.saleCompanyInfo==="null"?"":product.saleCompanyInfo}
+                            value={product.saleCompanyInfo === "null" ? "" : product.saleCompanyInfo}
                             onChange={handleInputChange}
                         />
                     </div>
@@ -690,6 +715,18 @@ const ReadComponent = ({id}) => {
 
                 </div>
             </form>
+
+
+            {/* 모달 */}
+            <Dialog open={modalOpen} handler={closeModal}>
+                <DialogHeader>알림</DialogHeader>
+                <DialogBody>
+                    <span style={{color: "black"}}>{modalMessage}</span>
+                </DialogBody>
+                <DialogFooter>
+                    <Button color="blue" onClick={closeModal}>확인</Button>
+                </DialogFooter>
+            </Dialog>
         </div>
     );
 };

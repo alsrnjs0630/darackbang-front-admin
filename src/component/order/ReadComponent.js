@@ -15,6 +15,7 @@ import {
 import {getOne} from "../../api/orderApi"
 
 import useCustomMove from "../hooks/useCustomMove";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 
 const initState = {
@@ -32,13 +33,17 @@ const ReadComponent = ({id}) => {
 
     const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
 
+    const {exceptionHandle} = useCustomLogin()
+
     const [order, setOrder] = useState(initState);
 
     useEffect(() => {
         getOne(id).then(data => {
             console.log(data);
             setOrder(data);
-        })
+        }).catch(error => {
+            exceptionHandle(error)
+        });
 
     }, [id])
 
@@ -146,31 +151,31 @@ const ReadComponent = ({id}) => {
                     </div>
 
                 </div>
-                    {/* Product 리스트 부분 */}
-                    {order.orderItems.map((orderItem) => (
-                        <div key={orderItem.id}
-                             className="p-4 hover:bg-gray-100 border-b border-gray-200">
-                            <div className="grid grid-cols-4 gap-4">
-                                <span>{orderItem.product.pno}</span>
-                                <span>{orderItem.product.productName}</span>
-                                <span>{`${orderItem.productPrice.toLocaleString()}원`}</span>
-                                <span>{`${orderItem.productQuantity}개`}</span>
-                            </div>
-                        </div>
-                    ))}
-
-                    {/* Submit and Action Buttons */}
-                    <div className="flex justify-center mt-8 space-x-6">
-                        <div className="w-1/5">
-                            <Button type="submit" className="w-full text-white rounded bg-blue-500"
-                                    onClick={moveToList}>
-                                리스트로 이동
-                            </Button>
+                {/* Product 리스트 부분 */}
+                {order.orderItems.map((orderItem) => (
+                    <div key={orderItem.id}
+                         className="p-4 hover:bg-gray-100 border-b border-gray-200">
+                        <div className="grid grid-cols-4 gap-4">
+                            <span>{orderItem.product.pno}</span>
+                            <span>{orderItem.product.productName}</span>
+                            <span>{`${orderItem.productPrice.toLocaleString()}원`}</span>
+                            <span>{`${orderItem.productQuantity}개`}</span>
                         </div>
                     </div>
-                </div>
-            </>
-            );
-            };
+                ))}
 
-            export default ReadComponent;
+                {/* Submit and Action Buttons */}
+                <div className="flex justify-center mt-8 space-x-6">
+                    <div className="w-1/5">
+                        <Button type="submit" className="w-full text-white rounded bg-blue-500"
+                                onClick={moveToList}>
+                            리스트로 이동
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+};
+
+export default ReadComponent;

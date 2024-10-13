@@ -7,6 +7,7 @@ import membersRouter from "./membersRouter";
 import ordersRouter from "./ordersRouter";
 import paymentsRouter from "./paymentsRouter";
 import statisticsRouter from "./statisticsRouter";
+import PrivateRouter from "./PrivateRouter";
 
 const Loading = <div>Loading...</div>; // 로딩 문구
 
@@ -17,7 +18,13 @@ const root = createBrowserRouter([
     },
     {
         path: "/dashboard", // Main application after login, with BasicLayout
-        element: <Suspense fallback={Loading}><BasicLayout /></Suspense>,
+        element: (
+            <PrivateRouter>
+                <Suspense fallback={<Loading />}>
+                    <BasicLayout />
+                </Suspense>
+            </PrivateRouter>
+        ),
         children: [
             {
                 path: "products",

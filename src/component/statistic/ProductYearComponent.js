@@ -2,8 +2,12 @@ import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 
 import {getProductYearStat} from "../../api/statisticApi";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const ProductYearComponent = () => {
+
+    const {exceptionHandle} = useCustomLogin()
+
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -16,7 +20,7 @@ const ProductYearComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            console.log("error results:", error); // Output the data to console
+            exceptionHandle(error)
         });
     }, [year]);
 
@@ -32,13 +36,13 @@ const ProductYearComponent = () => {
         const selectedYear = Number(e.target.value);
         setYear(selectedYear);
 
-        try {
-            // 새로 선택된 분기를 사용하여 데이터를 가져옵니다.
-            const response = getProductYearStat(selectedYear);
-            setData(response.data);
-        } catch (error) {
-            console.error('데이터를 가져오는 데 실패했습니다:', error);
-        }
+        getProductYearStat(selectedYear).then(data => {
+            setData(data);
+            console.log("Search results:", data); // Output the data to console
+        }).catch(error => {
+            exceptionHandle(error)
+        });
+
     };
 
 

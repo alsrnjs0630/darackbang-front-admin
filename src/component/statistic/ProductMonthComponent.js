@@ -2,8 +2,12 @@ import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 
 import { getProductMonthStat} from "../../api/statisticApi";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const ProductMonthComponent = () => {
+
+    const {exceptionHandle} = useCustomLogin()
+
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -19,7 +23,7 @@ const ProductMonthComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            console.log("error results:", error); // Output the data to console
+            exceptionHandle(error)
         });
     }, [year,month]);
 
@@ -37,7 +41,7 @@ const ProductMonthComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            console.log("error results:", error); // Output the data to console
+            exceptionHandle(error)
         });
     };
 

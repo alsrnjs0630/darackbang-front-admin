@@ -1,8 +1,12 @@
 import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 import { getProductTotal} from "../../api/statisticApi";
+import useCustomLogin from "../hooks/useCustomLogin";
 
 const ProductTotalComponent = () => {
+
+    const {exceptionHandle} = useCustomLogin()
+
 
     const [data, setData] = useState([]);
 
@@ -11,7 +15,7 @@ const ProductTotalComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            console.log("error results:", error); // Output the data to console
+            exceptionHandle(error)
         });
     }, []);
 

@@ -1,4 +1,4 @@
-// ListPage.js
+// StatisticPage.js
 import React from "react";
 import StatisticComponent from "../../component/statistic/StatisticComponent";
 

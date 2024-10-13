@@ -13,6 +13,7 @@ import ProductMonthComponent from "../statistic/ProductMonthComponent";
 
 const StatisticComponent = () => {
 
+
     return (
         <div className="container mx-auto p-4">
             {/* Age Components */}
