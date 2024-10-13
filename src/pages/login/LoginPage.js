@@ -39,7 +39,7 @@ const LoginPage = () => {
     const closeModal = () => {
         setIsModalOpen(false); // Modal 닫기
         if (modalMessage === "로그인 성공") {
-            navigate('/dashboard/products/list'); // 로그인 성공 후 대시보드로 이동
+            navigate('/dashboard/statistics/all'); // 로그인 성공 후 대시보드로 이동
         }
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import {
     Card,
     Typography,
@@ -10,13 +10,14 @@ import {
     DialogBody,
     DialogFooter
 } from "@material-tailwind/react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../reducer/loginSlice";
-import { authLogout } from "../api/loginApi";
+import {Outlet, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {logout} from "../reducer/loginSlice";
+import {authLogout} from "../api/loginApi";
 import useCustomLogin from "../component/hooks/useCustomLogin";
+import {persistor} from '../store'; // Import the persistor
 
-const BasicLayout = ({ children }) => {
+const BasicLayout = ({children}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -51,8 +52,6 @@ const BasicLayout = ({ children }) => {
 
     const handleLogout = async () => {
 
-
-
         authLogout()
             .then(data => {
                 console.log("로그아웃 데이터:{}", data);
@@ -60,7 +59,14 @@ const BasicLayout = ({ children }) => {
                 if (data.RESULT === "LOGOUT SUCCESS") {
                     openModal("로그아웃 하였습니다.", () => {
                         dispatch(logout()); // Redux에서 로그아웃 처리
-                        navigate("/"); // 메인 페이지로 이동
+                        // 진행 중인 persist 작업을 먼저 flush
+                        persistor.flush();
+                        // redux-persist에서 유지된 상태를 purge
+                        persistor.purge();
+                        // localStorage에서 유지된 상태를 삭제
+                        localStorage.removeItem('persist:root'); // 필요시 키를 조정
+                        // 메인 페이지로 이동
+                        navigate("/");
                     });
                 }
             })
@@ -172,7 +178,7 @@ const BasicLayout = ({ children }) => {
                 </Card>
 
                 <main className={"bg-sky-300 flex-1 px-5 py-5"}>
-                    <Outlet />
+                    <Outlet/>
                 </main>
             </div>
 
