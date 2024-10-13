@@ -15,7 +15,7 @@ const initState = {
     nextPage: 0,
     totalPage: 0,
     currentPage: 0,
-    search:null
+    search: null
 }
 
 
@@ -42,7 +42,7 @@ const ListComponent = () => {
 
         getList(params).then(data => {
 
-            console.log("데이터:{}",data)
+            console.log("데이터:{}", data)
             setServerData(data);
 
         }).catch(error => {
@@ -56,7 +56,7 @@ const ListComponent = () => {
         const params = {
             page,
             size,
-            component:"product",
+            component: "product",
             productName: searchType === "productName" ? searchValue : null,
             salePrice: searchType === "salePrice" ? searchValue : null,
         };
@@ -164,7 +164,15 @@ const ListComponent = () => {
                         <span>{product.productName}</span>
                         <span>{`${product.retailPrice.toLocaleString()}원`}</span>
                         <span>{`${product.salePrice.toLocaleString()}원`}</span>
-                        <span>{product.category}</span>
+                        <span>
+                            {product.category === "L01"
+                                ? "잎차"
+                                : product.category === "B01"
+                                    ? "티백"
+                                    : product.category === "F01"
+                                        ? "열매"
+                                        : product.category}
+                            </span>
                         <span>{product.quantity}</span>
                         <span>{formatDate(product.createdDate)}</span>
                         <span>{formatDate(product.updatedDate)}</span>
