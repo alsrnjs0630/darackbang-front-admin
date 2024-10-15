@@ -350,6 +350,20 @@ const ReadComponent = ({id}) => {
                             required
                         />
                     </div>
+                    {/* 카테고리 */}
+                    <div className="mb-4">
+                        <Select
+                            label="카테고리"
+                            name="category"
+                            value={product.category}
+                            onChange={(e) => setProduct({ ...product, category: e })}
+                            className="w-full px-3 py-2 border rounded"
+                        >
+                            <Option value="L01">잎차</Option>
+                            <Option value="B01">티백</Option>
+                            <Option value="F01">열매</Option>
+                        </Select>
+                    </div>
                     {/* 상품 가격 */}
                     <div className="mb-4">
                         <Input
