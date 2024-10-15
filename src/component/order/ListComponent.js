@@ -141,7 +141,7 @@ const ListComponent = () => {
                         className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
                         onClick={() => moveToRead(order.id)}
                     >
-                        <div className="grid grid-cols-7 gap-4">
+                        <div className="grid grid-cols-7 gap-4 text-sm">
                             <span>{order.id}</span>
                             <span>{order.totalOrderPrice}</span>
                             <span>{order.orderDate}</span>

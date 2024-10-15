@@ -159,7 +159,7 @@ const ListComponent = () => {
                     className="p-4 hover:bg-gray-100 cursor-pointer border-b border-gray-200"
                     onClick={() => moveToRead(product.id)}
                 >
-                    <div className="grid grid-cols-8 gap-4">
+                    <div className="grid grid-cols-8 gap-4 text-sm">
                         <span>{product.pno}</span>
                         <span>{product.productName}</span>
                         <span>{`${product.retailPrice.toLocaleString()}원`}</span>
