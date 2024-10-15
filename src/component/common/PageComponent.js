@@ -1,21 +1,34 @@
-const PageComponent = ({serverData, movePage}) => {
+import React from "react";
+import { Button, IconButton } from "@material-tailwind/react";
+import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+
+const PageComponent = ({ serverData, movePage }) => {
+
+    const getItemProps = (pageNum) => ({
+        variant: serverData.currentPage === pageNum ? "filled" : "text",
+        color: "gray",
+        onClick: () => movePage({ page: pageNum }),
+    });
+
     return (
-        <div className="m-6 flex justify-center">
-            {serverData.prev ?
-                <div
-                    className="m-2 p-2 w-16 text-center font-bold text-blue-400 "
-                    onClick={() => movePage({page: serverData.prevPage})}> Prev </div> : <></>}
-            {serverData.pageNumbers.map(pageNum => <div key={pageNum}
-                                                        className={`m-2 p-2 w-12 text-center rounded shadow-md text-white ${serverData.current === pageNum ? 'bg-gray-500' : 'bg-blue-400'}`}
-                                                        onClick={() => movePage({page: pageNum})}>
-                {pageNum} </div>
-            )}
-            {serverData.next ? <div
-                className="m-2 p-2 w-16 text-center font-bold text-blue-400"
-                onClick={() => movePage({page: serverData.nextPage})}> Next
-            </div> : <></>}
+        <div className="flex items-center gap-4 justify-center m-6">
+            <Button variant="text" className="flex items-center gap-2" onClick={() => movePage({ page: serverData.prevPage })} disabled={!serverData.prev}>
+                <ArrowLeftIcon strokeWidth={2} className="h-4 w-4" /> 이전 페이지
+            </Button>
+
+            <div className="flex items-center gap-2">
+                {serverData.pageNumbers.map((pageNum) => (
+                    <IconButton key={pageNum} {...getItemProps(pageNum)}>
+                        {pageNum}
+                    </IconButton>
+                ))}
+            </div>
+
+            <Button variant="text" className="flex items-center gap-2" onClick={() => movePage({ page: serverData.nextPage })} disabled={!serverData.next}>
+                다음 페이지<ArrowRightIcon strokeWidth={2} className="h-4 w-4" />
+            </Button>
         </div>
     );
-}
+};
 
 export default PageComponent;
