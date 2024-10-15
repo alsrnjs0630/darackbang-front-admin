@@ -1,14 +1,13 @@
 // ListComponent.js
 import React, {useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
-import '../../pages/product/ProductList.css'; // Add your custom CSS
+import '../../pages/product/ProductList.css'; // 사용자 정의 CSS 추가
 import {Input, Button, Textarea, Select, Option} from "@material-tailwind/react";
 import {activateProduct, create, updateProduct, deleteProduct, getOne} from "../../api/productApi"
 import {Dialog, DialogHeader, DialogBody, DialogFooter} from "@material-tailwind/react";
 
 import {API_SERVER_HOST} from "../../api/host";
 
-import axios from "axios";
 import useCustomMove from "../hooks/useCustomMove";
 import useCustomLogin from "../hooks/useCustomLogin";
 
@@ -51,7 +50,7 @@ const ReadComponent = ({id}) => {
     console.log("아이티::::::::::{}", id)
 
     const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
-    // Other state variables
+    // 다른 상태 변수들
     const [files, setFiles] = useState([]);
     const [descImages, setDescImages] = useState([]);
     const [mainFileDragging, setMainFileDragging] = useState(null);
@@ -66,7 +65,7 @@ const ReadComponent = ({id}) => {
     // 모달 상태 관리
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
-    const [onCloseCallback, setOnCloseCallback] = useState(null); // 모달 닫힐 때 실행할 콜백
+    const [onCloseCallback, setOnCloseCallback] = useState(null); // 모달이 닫힐 때 실행할 콜백
 
 
     const confirmModal = (message, onConfirm) => {
@@ -76,7 +75,7 @@ const ReadComponent = ({id}) => {
     const openModal = (message, callback = null) => {
         setModalMessage(message);
         setModalOpen(true);
-        setOnCloseCallback(() => callback); // 콜백을 저장
+        setOnCloseCallback(() => callback); // 콜백 저장
     };
 
     const closeModal = () => {
@@ -87,8 +86,7 @@ const ReadComponent = ({id}) => {
         }
     };
 
-
-    const humanFileSize = (size) => {
+    const productImageFileSize = (size) => {
         const i = Math.floor(Math.log(size) / Math.log(1024));
         return (size / Math.pow(1024, i)).toFixed(2) + " " + ["B", "kB", "MB", "GB", "TB"][i];
     };
@@ -181,27 +179,31 @@ const ReadComponent = ({id}) => {
 
         const formData = new FormData();
 
-        const productImages = []; // Array to store the names of non-file objects (e.g., Blob, URLs)
-
+        const productImages = []; // 파일이 아닌 객체(예: Blob, URL)들의 이름을 저장할 배열
 
         Object.keys(product).forEach((key) => {
-            // Exclude specific keys and null values
+            // 특정 키와 null 값을 제외
             if (!['productImages', 'createdDate', 'updatedDate'].includes(key) && product[key] !== null) {
                 formData.append(key, product[key]);
             }
         });
 
 
-        // Process main product images
+        const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
+        if (product.manufactureDate > today) {
+            openModal("제조일자는 오늘 날짜보다 미래일 수 없습니다.");
+            document.getElementsByName('manufactureDate')[0].focus();
+            return; // 제조일자가 미래인 경우 폼 제출 중지
+        }
+
+        // 메인 상품 이미지 처리
         files.forEach((file, index) => {
-            const sequenceNumber = index + 1; // Add sequence number for desc images
+            const sequenceNumber = index + 1; // 설명 이미지에 대한 순번 추가
             if (file instanceof File) {
                 console.log(`파일 추가 (File ${sequenceNumber}):`, file.name);
                 formData.append("files", file, `${sequenceNumber}_${file.name}`);
             } else {
-                // Add structured image info to productImages array
-
-                // Push the updated fileInfo to productImages array
+                // 구조화된 이미지 정보를 productImages 배열에 추가
                 productImages.push(
                     {
                         type: "INFO",
@@ -212,9 +214,9 @@ const ReadComponent = ({id}) => {
             }
         });
 
-        // Process description images
+        // 설명 이미지 처리
         descImages.forEach((file, index) => {
-            const sequenceNumber = index + 1; // Add sequence number for desc images
+            const sequenceNumber = index + 1; // 설명 이미지에 대한 순번 추가
             if (file instanceof File) {
                 console.log(`파일 추가 (File ${sequenceNumber}):`, file.name);
                 formData.append("descFiles", file, `${sequenceNumber}_${file.name}`);
@@ -230,7 +232,7 @@ const ReadComponent = ({id}) => {
             }
         });
 
-        // Add productImages array to the form data
+        // productImages 배열을 폼 데이터에 추가
         formData.append("productImages", JSON.stringify(productImages));
 
 
@@ -239,7 +241,7 @@ const ReadComponent = ({id}) => {
             console.log(result);
 
             if (result.RESULT === "SUCCESS") {
-                // RESULT가 "SUCCESS"인 경우 모달을 열어서 성공 메시지를 표시
+                // RESULT가 "SUCCESS"인 경우 모달을 열어 성공 메시지를 표시
                 openModal("상품 수정에 성공하였습니다.");
             } else {
                 // RESULT가 "SUCCESS"가 아닌 경우 실패 모달 표시
@@ -257,7 +259,7 @@ const ReadComponent = ({id}) => {
         getOne(id).then(data => {
             console.log(data);
             setProduct(data);
-            // Load existing images into the respective arrays based on productType
+            // productType을 기준으로 기존 이미지를 각각의 배열에 로드
             const infoImages = data.productImages
                 .filter((img) => img.productType === "INFO")
                 .map((img) => ({
@@ -265,8 +267,8 @@ const ReadComponent = ({id}) => {
                     name: img.productFileName,
                     type: "image/*",
                     size: 50000,
-                    preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // Assuming a path where images are served
-                    existing: true, // Mark existing images
+                    preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // 이미지가 제공되는 경로로 가정
+                    existing: true, // 기존 이미지를 표시
                 }));
             const descImages = data.productImages
                 .filter((img) => img.productType === "DESC")
@@ -275,8 +277,8 @@ const ReadComponent = ({id}) => {
                     name: img.productFileName,
                     type: "image/*",
                     size: 50000,
-                    preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // Assuming a path where images are served
-                    existing: true, // Mark existing images
+                    preview: `${API_SERVER_HOST}/admin/products/view/${img.productFileName}`, // 이미지가 제공되는 경로로 가정
+                    existing: true, // 기존 이미지를 표시
                 }));
 
             setFiles(infoImages);
@@ -288,7 +290,7 @@ const ReadComponent = ({id}) => {
     }, [id])
 
 
-    // Function to handle delete
+    // 삭제 처리 함수
     const handleDelete = async () => {
         confirmModal("정말로 이 상품을 삭제하시겠습니까?", async () => {
 
@@ -308,7 +310,7 @@ const ReadComponent = ({id}) => {
     };
 
 
-    // Function to handle delete
+    // 활성화 처리 함수
     const handleActive = async () => {
         confirmModal("정말로 이 상품을 활성화하시겠습니까?", async () => {
 
@@ -449,23 +451,7 @@ const ReadComponent = ({id}) => {
                             onChange={handleInputChange}
                         />
                     </div>
-
-                    {/* 카테고리 */}
-                    <div className="mb-4">
-                        <Select
-                            label="카테고리"
-                            name="category"
-                            value={product.category} // Bind the value directly to product.category
-                            onChange={(e) => setProduct({...product, category: e})}
-                            className="w-full px-3 py-2 border rounded"
-                        >
-                            <Option value="L01">잎차</Option>
-                            <Option value="B01">티백</Option>
-                            <Option value="F01">열매</Option>
-                        </Select>
-                    </div>
-
-                    {/* 판매사 */}
+                   {/* 판매사 */}
                     <div className="mb-4">
                         <Input
                             label="판매사"
@@ -643,7 +629,7 @@ const ReadComponent = ({id}) => {
                                         <div
                                             className="absolute bottom-0 left-0 right-0 flex flex-col p-2 text-xs bg-white bg-opacity-50">
                                             <span className="w-full font-bold text-gray-900 truncate">{file.name}</span>
-                                            <span className="text-xs text-gray-900">{humanFileSize(file.size)}</span>
+                                            <span className="text-xs text-gray-900">{productImageFileSize(file.size)}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -697,7 +683,7 @@ const ReadComponent = ({id}) => {
                                         <div
                                             className="absolute bottom-0 left-0 right-0 flex flex-col p-2 text-xs bg-white bg-opacity-50">
                                             <span className="w-full font-bold text-gray-900 truncate">{file.name}</span>
-                                            <span className="text-xs text-gray-900">{humanFileSize(file.size)}</span>
+                                            <span className="text-xs text-gray-900">{productImageFileSize(file.size)}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -708,7 +694,7 @@ const ReadComponent = ({id}) => {
                     </div>
                 </div>
 
-                {/* Submit button */}
+                {/* 제출 버튼 */}
                 <div className="flex justify-center items-center mt-4 space-x-4">
                     <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
                         수정
@@ -719,9 +705,9 @@ const ReadComponent = ({id}) => {
                         className={`px-4 py-2 text-white rounded ${product.isDeleted ? 'bg-green-500' : 'bg-red-500'}`}
                         onClick={() => {
                             if (product.isDeleted) {
-                                handleActive(); // Call handleActive if product is deleted
+                                handleActive(); // 상품이 삭제된 경우 handleActive 호출
                             } else {
-                                handleDelete(); // Call handleDelete if product is not deleted
+                                handleDelete(); // 상품이 삭제되지 않은 경우 handleDelete 호출
                             }
                         }}
                     >

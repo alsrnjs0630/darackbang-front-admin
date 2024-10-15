@@ -3,11 +3,11 @@ import React, {useState} from "react";
 import {useDropzone} from "react-dropzone";
 import '../../pages/product/ProductList.css'; // Add your custom CSS
 import {
- create
+    create
 } from "../../api/productApi";
 import useCustomMove from "../hooks/useCustomMove";
 import {Input, Textarea, Select, Option} from "@material-tailwind/react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter, Button } from "@material-tailwind/react";
+import {Dialog, DialogHeader, DialogBody, DialogFooter, Button} from "@material-tailwind/react";
 import useCustomLogin from "../hooks/useCustomLogin";
 
 const CreateComponent = () => {
@@ -49,7 +49,7 @@ const CreateComponent = () => {
     const [descFileDragging, setDescFileDragging] = useState(null);
     const [descFileDropping, setDescFileDropping] = useState(null);
 
-// 모달 상태 관리
+    // 모달 상태 관리
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [onCloseCallback, setOnCloseCallback] = useState(null); // 모달 닫힐 때 실행할 콜백
@@ -69,7 +69,7 @@ const CreateComponent = () => {
     };
 
 
-    const humanFileSize = (size) => {
+    const productImageFileSize = (size) => {
         const i = Math.floor(Math.log(size) / Math.log(1024));
         return (size / Math.pow(1024, i)).toFixed(2) + " " + ["B", "kB", "MB", "GB", "TB"][i];
     };
@@ -158,56 +158,66 @@ const CreateComponent = () => {
     }
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        e.preventDefault(); // 기본 동작(페이지 새로고침 등) 방지
 
+        // 필수 입력 필드 목록 (이름과 레이블을 함께 정의)
         const requiredFields = [
-            { name: 'productName', label: '상품명' },
-            { name: 'retailPrice', label: '상품 가격' },
-            { name: 'salePrice', label: '판매 가격' },
-            { name: 'manufacture', label: '제조사' },
-            { name: 'origin', label: '원산지' },
-            { name: 'quantity', label: '수량' },
-            { name: 'expirationDate', label: '유통기한' },
-            { name: 'manufactureDate', label: '제조일자' },
-            { name: 'saleCompany', label: '판매사' }
+            {name: 'productName', label: '상품명'},
+            {name: 'retailPrice', label: '상품 가격'},
+            {name: 'salePrice', label: '판매 가격'},
+            {name: 'manufacture', label: '제조사'},
+            {name: 'origin', label: '원산지'},
+            {name: 'quantity', label: '수량'},
+            {name: 'expirationDate', label: '유통기한'},
+            {name: 'manufactureDate', label: '제조일자'},
+            {name: 'saleCompany', label: '판매사'}
         ];
 
+        // 각 필수 필드에 대해 값이 입력되었는지 확인
         for (let field of requiredFields) {
 
-            console.log("ssssssssss:{}",product)
-            if (!product[field.name]) {
+            console.log("product:{}", product); // 디버깅을 위한 로그 출력
+            if (!product[field.name]) { // 필드 값이 비어있을 경우
 
+                console.log(field.name); // 디버깅을 위한 필드명 출력
 
-                console.log(field.name)
+                console.log(field.label); // 디버깅을 위한 레이블 출력
 
-                console.log(field.label)
-
+                // 필수 필드가 비어있을 경우 모달을 띄우고 경고 메시지 표시
                 openModal(`${field.label}을(를) 입력해야 합니다!`);
 
-
+                // 해당 필드에 포커스 설정
                 const inputElement = document.getElementsByName(field.name);
 
-                console.log(inputElement)
+                console.log(inputElement); // 디버깅을 위한 입력 요소 확인
 
                 if (inputElement) {
-                    inputElement.focus(); // Focus on the first invalid input
+                    inputElement.focus(); // 유효하지 않은 첫 번째 입력 요소에 포커스 설정
                 }
-                return; // Stop form submission if validation fails
+                return; // 유효성 검사가 실패한 경우 폼 제출 중지
             }
         }
 
+        // 제조일자가 오늘 날짜보다 미래일 수 없음을 검사
+        const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
+        if (product.manufactureDate > today) {
+            openModal("제조일자는 오늘 날짜보다 미래일 수 없습니다.");
+            document.getElementsByName('manufactureDate')[0].focus(); // 제조일자 입력 필드에 포커스 설정
+            return; // 제조일자가 미래일 경우 폼 제출 중지
+        }
 
-        // Check if at least one main product image is uploaded
+        // 최소 한 개의 주요 상품 이미지가 업로드되었는지 확인
         if (files.length === 0) {
-            openModal("상품이미지는 하나 이상 있어야 합니다.!");
-            return; // Stop form submission if no images are uploaded
+            openModal("상품이미지는 하나 이상 있어야 합니다.!"); // 이미지가 없을 경우 경고 메시지 표시
+            return; // 이미지가 없는 경우 폼 제출 중지
         }
 
-        // Check if at least one description image is uploaded
+        // 최소 한 개의 설명 이미지가 업로드되었는지 확인
         if (descImages.length === 0) {
-            openModal("상품 설명 이미지는 하나 이상 있어야 합니다.");
-            return; // Stop form submission if no description images are uploaded
+            openModal("상품 설명 이미지는 하나 이상 있어야 합니다."); // 설명 이미지가 없을 경우 경고 메시지 표시
+            return; // 설명 이미지가 없는 경우 폼 제출 중지
         }
+
 
 
         const formData = new FormData();
@@ -262,7 +272,7 @@ const CreateComponent = () => {
                             label="카테고리"
                             name="category"
                             value={product.category}
-                            onChange={(e) => setProduct({ ...product, category: e })}
+                            onChange={(e) => setProduct({...product, category: e})}
                             className="w-full px-3 py-2 border rounded"
                         >
                             <Option value="L01">잎차</Option>
@@ -582,7 +592,7 @@ const CreateComponent = () => {
                                                 <span
                                                     className="w-full font-bold text-gray-900 truncate">{file.name}</span>
                                             <span
-                                                className="text-xs text-gray-900">{humanFileSize(file.size)}</span>
+                                                className="text-xs text-gray-900">{productImageFileSize(file.size)}</span>
                                         </div>
                                     </div>
                                 ))}
@@ -638,7 +648,7 @@ const CreateComponent = () => {
                                                 <span
                                                     className="w-full font-bold text-gray-900 truncate">{file.name}</span>
                                             <span
-                                                className="text-xs text-gray-900">{humanFileSize(file.size)}</span>
+                                                className="text-xs text-gray-900">{productImageFileSize(file.size)}</span>
                                         </div>
                                     </div>
                                 ))}
