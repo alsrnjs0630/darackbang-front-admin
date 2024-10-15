@@ -22,7 +22,7 @@ const ListComponent = () => {
 
     const {exceptionHandle} = useCustomLogin()
 
-    const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
+    const {page, size, refresh, moveToList, moveToRead} = useCustomMove()
 
     const [serverData, setServerData] = useState(initState)
 

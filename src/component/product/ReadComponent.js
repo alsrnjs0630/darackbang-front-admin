@@ -548,6 +548,7 @@ const ReadComponent = ({id}) => {
                     <div className="mb-4">
                         <Input
                             label="용량 (ml)"
+                            type="number"
                             name="volume"
                             value={product.volume === "null" ? "" : product.volume}
                             onChange={handleInputChange}
