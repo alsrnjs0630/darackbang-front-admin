@@ -1,18 +1,16 @@
 import {Suspense, lazy} from "react";
 import {Navigate} from "react-router-dom";
 
-const Loading = <div>Loading...</div>
+const Loading = () => <div>Loading...</div>;
 
 const OrdersList = lazy(() => import("../pages/order/ListPage"))
 const OrdersRead = lazy(() => import("../pages/order/ReadPage"))
-
-//const ProductsModify = lazy(() => import("../pages/products/ModifyPage"))
 
 const ordersRouter = () => {
     return [
         {
             path: "list",
-            element: <Suspense fallback={Loading}><OrdersList/></Suspense>
+            element: <Suspense fallback={<Loading />}><OrdersList/></Suspense>
         },
         {
             path: "",
@@ -20,7 +18,7 @@ const ordersRouter = () => {
         },
         {
             path: "read/:id",
-            element: <Suspense fallback={Loading}><OrdersRead/></Suspense>
+            element: <Suspense fallback={<Loading />}><OrdersRead/></Suspense>
         }
     ]
 }

@@ -17,7 +17,7 @@ const ProductQuarterComponent = () => {
     const [year, setYear] = useState(currentYear); // Default year
     const [quarter, setQuarter] = useState(currentQuarter);
     const [data, setData] = useState([]);
-
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
     useEffect(() => {
         getProductQuarterStat(year,quarter).then(data => {
             setData(data);

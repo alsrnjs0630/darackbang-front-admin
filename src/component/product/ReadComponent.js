@@ -3,14 +3,14 @@ import React, {useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
 import '../../pages/product/ProductList.css'; // 사용자 정의 CSS 추가
 import {Input, Button, Textarea, Select, Option} from "@material-tailwind/react";
-import {activateProduct, create, updateProduct, deleteProduct, getOne} from "../../api/productApi"
+import {activateProduct,  updateProduct, deleteProduct, getOne} from "../../api/productApi"
 import {Dialog, DialogHeader, DialogBody, DialogFooter} from "@material-tailwind/react";
 
 import {API_SERVER_HOST} from "../../api/host";
 
 import useCustomMove from "../hooks/useCustomMove";
 import useCustomLogin from "../hooks/useCustomLogin";
-
+import PropTypes from 'prop-types';
 
 const initState = {
     id: "",
@@ -49,7 +49,7 @@ const ReadComponent = ({id}) => {
 
     console.log("아이티::::::::::{}", id)
 
-    const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
+    const {   moveToList,  } = useCustomMove()
     // 다른 상태 변수들
     const [files, setFiles] = useState([]);
     const [descImages, setDescImages] = useState([]);
@@ -730,6 +730,11 @@ const ReadComponent = ({id}) => {
             </Dialog>
         </div>
     );
+};
+
+//컴포넌트에 전달하는 객체에 대한 정의
+ReadComponent.propTypes = {
+    id: PropTypes.number.isRequired, // 숫자
 };
 
 export default ReadComponent;

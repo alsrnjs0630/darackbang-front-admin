@@ -17,7 +17,7 @@ const ProductMonthComponent = () => {
     const [month, setMonth] = useState(currentMonth);
     const [data, setData] = useState([]);
 
-
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
     useEffect(() => {
         getProductMonthStat(year,month).then(data => {
             setData(data);

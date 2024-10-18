@@ -17,7 +17,7 @@ import {authLogout} from "../api/loginApi";
 import useCustomLogin from "../component/hooks/useCustomLogin";
 import {persistor} from '../store'; // Import the persistor
 
-const BasicLayout = ({children}) => {
+const BasicLayout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -41,7 +41,6 @@ const BasicLayout = ({children}) => {
         setIsModalOpen(false); // 모달 닫기
         setConfirmAction(null); // 확인 함수 초기화
     };
-
 
     const loginState = useSelector((state) => state.loginSlice);
 
@@ -71,7 +70,6 @@ const BasicLayout = ({children}) => {
                 }
             })
             .catch(error => {
-
                 exceptionHandle(error)
             });
 

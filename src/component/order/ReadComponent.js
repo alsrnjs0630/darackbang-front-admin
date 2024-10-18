@@ -2,21 +2,14 @@
 import React, {useEffect, useState} from "react";
 import '../../pages/product/ProductList.css'; // Add your custom CSS
 import {
-    Input,
     Button,
-    Select,
-    Option,
-    Dialog,
-    DialogHeader,
-    DialogBody,
-    DialogFooter
 } from "@material-tailwind/react";
 
 import {getOne} from "../../api/orderApi"
 
 import useCustomMove from "../hooks/useCustomMove";
 import useCustomLogin from "../hooks/useCustomLogin";
-
+import PropTypes from 'prop-types';
 
 const initState = {
     id: "",  // Long type
@@ -177,5 +170,11 @@ const ReadComponent = ({id}) => {
         </>
     );
 };
+
+//컴포넌트에 전달하는 객체에 대한 정의
+ReadComponent.propTypes = {
+    id: PropTypes.number.isRequired, // 숫자
+};
+
 
 export default ReadComponent;

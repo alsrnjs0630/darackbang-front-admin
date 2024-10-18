@@ -15,11 +15,11 @@ const Loading = () => <div>Loading...</div>;
 
 const root = createBrowserRouter([
     {
-        path: "/", // Login page route without BasicLayout
+        path: "/", //로그인 페이지 로딩
         element: <Suspense fallback={<Loading />}><LoginPage /></Suspense>,
     },
     {
-        path: "/dashboard", // Main application after login, with BasicLayout
+        path: "/dashboard", // 로그인 후 접근하는 기본 URL 매핑 주소
         element: (
             <PrivateRouter>
                 <Suspense fallback={<Loading />}>
@@ -51,7 +51,7 @@ const root = createBrowserRouter([
         ],
     },
     {
-        path: "/error", // Login page route without BasicLayout
+        path: "/error", //에러 처리 페이지 url
         element: <Suspense fallback={<Loading />}><ErrorPage /></Suspense>,
     },
 ]);

@@ -15,6 +15,7 @@ const ProductYearComponent = () => {
     const [year, setYear] = useState(currentYear); // Default year
     const [data, setData] = useState([]);
 
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
     useEffect(() => {
         getProductYearStat(year).then(data => {
             setData(data);

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, IconButton } from "@material-tailwind/react";
 import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import PropTypes from 'prop-types';
 
 const PageComponent = ({ serverData, movePage }) => {
 
@@ -30,5 +31,12 @@ const PageComponent = ({ serverData, movePage }) => {
         </div>
     );
 };
+
+//컴포넌트에 전달하는 객체에 대한 정의
+PageComponent.propTypes = {
+    serverData: PropTypes.object.isRequired,
+    movePage: PropTypes.func.isRequired,
+};
+
 
 export default PageComponent;

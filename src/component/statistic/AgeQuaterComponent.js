@@ -1,6 +1,5 @@
 import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
-
 import { getAgeGroupQuarterStat} from "../../api/statisticApi";
 import useCustomLogin from "../hooks/useCustomLogin";
 

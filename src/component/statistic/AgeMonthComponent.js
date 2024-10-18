@@ -1,7 +1,5 @@
 import {Chart} from 'react-google-charts';
 import {useEffect, useState} from "react";
-
-
 import {getAgeGroupMonthStat} from "../../api/statisticApi";
 import useCustomLogin from "../hooks/useCustomLogin";
 

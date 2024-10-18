@@ -18,6 +18,8 @@ import {
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import useCustomMove from "../hooks/useCustomMove";
 import useCustomLogin from "../hooks/useCustomLogin";
+import PropTypes from 'prop-types';
+
 
 const initState = {
     id: "",
@@ -385,5 +387,11 @@ const ReadComponent = ({ id }) => {
         </>
     );
 };
+
+//컴포넌트에 전달하는 객체에 대한 정의
+ReadComponent.propTypes = {
+    id: PropTypes.number.isRequired, // 숫자
+};
+
 
 export default ReadComponent;

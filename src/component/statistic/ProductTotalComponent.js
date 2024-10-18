@@ -10,6 +10,7 @@ const ProductTotalComponent = () => {
 
     const [data, setData] = useState([]);
 
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
     useEffect(() => {
         getProductTotal().then(data => {
             setData(data);
