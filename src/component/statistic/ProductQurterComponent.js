@@ -30,7 +30,7 @@ const ProductQuarterComponent = () => {
 
     const chartData = [
         ['product Name', 'Total Amount'],
-        ...data.map(item => [item.ageGroup, parseFloat(item.totalAmount)]),
+        ...data.map(item => [item.productName, parseFloat(item.totalAmount)]),
     ];
 
 

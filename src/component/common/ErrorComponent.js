@@ -4,6 +4,7 @@ import {Button, Card, Typography} from "@material-tailwind/react";
 import {logout} from "../../reducer/loginSlice";
 import {persistor} from "../../store";
 import {useDispatch} from "react-redux";
+import PropTypes from 'prop-types';
 
 const ErrorComponent = ({errorMessage, errorCode}) => {
 
@@ -58,15 +59,12 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
                                 <circle cx="12" cy="12" r="10" stroke="currentColor"/>
                             </svg>
                         </div>
-                        <Typography variant="h2" className="text-gray-800 text-center">
-                            문제원인
-                        </Typography>
                         <Typography variant="paragraph" className="mt-2 text-gray-600 text-center">
                             {errorMessage || "예기치 않은 오류가 발생했습니다. 나중에 다시 시도해 주세요."}
                         </Typography>
                         {errorCode && (
                             <Typography variant="small" className="mt-2 text-gray-600 text-center">
-                                {errorCode}
+                               <strong>에러코드:</strong> {errorCode}
                             </Typography>
                         )}
                         <Button
@@ -81,6 +79,11 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
             </Card>
         </div>
     );
+};
+
+ErrorComponent.propTypes = {
+    errorMessage: PropTypes.string.isRequired, // 문자열로 지정
+    errorCode: PropTypes.string.isRequired     // 문자열로 지정
 };
 
 export default ErrorComponent;
