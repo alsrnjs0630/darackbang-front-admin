@@ -1,14 +1,48 @@
 import React, { useState } from 'react';
-import { Input, Button, Card, CardBody } from '@material-tailwind/react';
+import {Input, Button, Card, CardBody, Dialog, DialogHeader, DialogBody, DialogFooter} from '@material-tailwind/react';
+import {authLogin} from "../../api/loginApi";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import useCustomLogin from "../hooks/useCustomLogin";
+import {login} from "../../reducer/loginSlice";
 
-const LoginComponent = ({ handleLogin }) => {
+const LoginComponent = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const {exceptionHandle} = useCustomLogin()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const onSubmit = (e) => {
         e.preventDefault();
-        handleLogin(email, password); // 부모 컴포넌트로부터 받은 로그인 함수 호출
+        // 로그인 API 호출
+        authLogin(email, password).then(data => {
+            // 성공적인 로그인 응답 처리
+            if (data.error === "ERROR_LOGIN") {
+                setModalMessage("로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다.");
+                setIsModalOpen(true); // Modal 열기
+            } else {
+                setModalMessage("로그인 성공");
+                setIsModalOpen(true); // Modal 열기
+                // 로그인 데이터를 Redux 스토어에 저장
+                dispatch(login(data));
+            }
+        }).catch(error => {
+            exceptionHandle(error);
+        });
     };
+
+    const [isModalOpen, setIsModalOpen] = useState(false); // Modal open state
+    const [modalMessage, setModalMessage] = useState(''); // Modal message state
+
+
+    const closeModal = () => {
+        setIsModalOpen(false); // Modal 닫기
+        if (modalMessage === "로그인 성공") {
+            navigate('/dashboard/statistics/all'); // 로그인 성공 후 대시보드로 이동
+        }
+    };
+
 
     return (
         <Card className="w-96">
@@ -34,6 +68,18 @@ const LoginComponent = ({ handleLogin }) => {
                     </Button>
                 </form>
             </CardBody>
+            {/* 로그인 결과 모달 */}
+            <Dialog open={isModalOpen} handler={closeModal}>
+                <DialogHeader>알림</DialogHeader>
+                <DialogBody divider>
+                    {modalMessage}
+                </DialogBody>
+                <DialogFooter>
+                    <Button color="blue" onClick={closeModal}>
+                        확인
+                    </Button>
+                </DialogFooter>
+            </Dialog>
         </Card>
     );
 };

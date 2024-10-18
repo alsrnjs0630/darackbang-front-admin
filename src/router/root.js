@@ -8,6 +8,7 @@ import ordersRouter from "./ordersRouter";
 import paymentsRouter from "./paymentsRouter";
 import statisticsRouter from "./statisticsRouter";
 import PrivateRouter from "./PrivateRouter";
+import ErrorPage from "../pages/error/ErrorPage";
 
 const Loading = <div>Loading...</div>; // 로딩 문구
 
@@ -47,6 +48,10 @@ const root = createBrowserRouter([
                 children: statisticsRouter(),
             },
         ],
+    },
+    {
+        path: "/error", // Login page route without BasicLayout
+        element: <Suspense fallback={Loading}><ErrorPage /></Suspense>,
     },
 ]);
 
