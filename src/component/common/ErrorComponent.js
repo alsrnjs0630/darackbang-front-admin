@@ -1,13 +1,15 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import {Button, Card, Typography} from "@material-tailwind/react";
 import {logout} from "../../reducer/loginSlice";
 import {persistor} from "../../store";
 import {useDispatch} from "react-redux";
 
-const ErrorComponent = ({ errorMessage, errorCode }) => {
+const ErrorComponent = ({errorMessage, errorCode}) => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const handleError = () => {
 
         if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED') {
@@ -15,12 +17,11 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
             persistor.flush();
             persistor.purge();
             localStorage.removeItem('persist:root'); // 필요시 키를 조정
-            navigate({ pathname: '/', search: errorMessage });
+            navigate({pathname: '/', search: errorMessage});
             return;
         }
 
-
-        if(errorCode==='ERR_NETWORK'){
+        if (errorCode === 'ERR_NETWORK') {
             dispatch(logout()); // Redux에서 로그아웃 처리
             // 진행 중인 persist 작업을 먼저 flush
             persistor.flush();
@@ -52,7 +53,7 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
                                 <path
                                     strokeLinecap="round"
                                     strokeLinejoin="round"
-                                    d="M12 9v2m0 4h.01M12 5h.01M12 17h.01"
+                                    d="M12 8v4m0 4h.01"
                                 />
                                 <circle cx="12" cy="12" r="10" stroke="currentColor"/>
                             </svg>
@@ -65,7 +66,7 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
                         </Typography>
                         {errorCode && (
                             <Typography variant="small" className="mt-2 text-gray-600 text-center">
-                                <strong>에러 코드:</strong> {errorCode}
+                                {errorCode}
                             </Typography>
                         )}
                         <Button
