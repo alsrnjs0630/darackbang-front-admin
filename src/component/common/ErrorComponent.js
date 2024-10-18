@@ -73,7 +73,7 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
                             color="red"
                             className="mt-6 w-full"
                         >
-                            {errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ? '홈으로' : '돌아가기'}
+                            {errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ? '로그인' : '돌아가기'}
                         </Button>
                     </div>
                 </div>
