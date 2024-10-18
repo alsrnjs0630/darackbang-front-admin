@@ -10,29 +10,11 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
     const dispatch = useDispatch();
     const handleError = () => {
 
-        if (errorMessage === 'REQUIRE_LOGIN') {
+        if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED') {
             dispatch(logout()); // Redux에서 로그아웃 처리
-            // 진행 중인 persist 작업을 먼저 flush
             persistor.flush();
-            // redux-persist에서 유지된 상태를 purge
             persistor.purge();
-            // localStorage에서 유지된 상태를 삭제
             localStorage.removeItem('persist:root'); // 필요시 키를 조정
-            //alert("로그인 해야만 합니다.");
-            navigate({ pathname: '/', search: errorMessage });
-            return;
-        }
-
-        if (errorMessage === 'ACCESSDENIED') {
-            dispatch(logout()); // Redux에서 로그아웃 처리
-            // 진행 중인 persist 작업을 먼저 flush
-            persistor.flush();
-            // redux-persist에서 유지된 상태를 purge
-            persistor.purge();
-            // localStorage에서 유지된 상태를 삭제
-            localStorage.removeItem('persist:root'); // 필요시 키를 조정
-            //alert("해당 메뉴를 사용할 수 있는 권한이 없습니다.");
-            // 메인 페이지로 이동
             navigate({ pathname: '/', search: errorMessage });
             return;
         }
@@ -91,7 +73,7 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
                             color="red"
                             className="mt-6 w-full"
                         >
-                            돌아가기
+                            {errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ? '홈으로' : '돌아가기'}
                         </Button>
                     </div>
                 </div>
