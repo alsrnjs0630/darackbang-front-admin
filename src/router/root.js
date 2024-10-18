@@ -1,4 +1,4 @@
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import { createBrowserRouter } from "react-router-dom";
 import BasicLayout from "../layouts/BasicLayout";
 import LoginPage from "../pages/login/LoginPage";
@@ -10,12 +10,13 @@ import statisticsRouter from "./statisticsRouter";
 import PrivateRouter from "./PrivateRouter";
 import ErrorPage from "../pages/error/ErrorPage";
 
-const Loading = <div>Loading...</div>; // 로딩 문구
+// Loading 컴포넌트를 함수로 정의
+const Loading = () => <div>Loading...</div>;
 
 const root = createBrowserRouter([
     {
         path: "/", // Login page route without BasicLayout
-        element: <Suspense fallback={Loading}><LoginPage /></Suspense>,
+        element: <Suspense fallback={<Loading />}><LoginPage /></Suspense>,
     },
     {
         path: "/dashboard", // Main application after login, with BasicLayout
@@ -51,7 +52,7 @@ const root = createBrowserRouter([
     },
     {
         path: "/error", // Login page route without BasicLayout
-        element: <Suspense fallback={Loading}><ErrorPage /></Suspense>,
+        element: <Suspense fallback={<Loading />}><ErrorPage /></Suspense>,
     },
 ]);
 

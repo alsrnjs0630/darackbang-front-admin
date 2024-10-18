@@ -60,11 +60,11 @@ const ErrorComponent = ({ errorMessage, errorCode }) => {
                         <Typography variant="h2" className="text-gray-800 text-center">
                             문제원인
                         </Typography>
-                        <Typography variant="body1" className="mt-2 text-gray-600 text-center">
+                        <Typography variant="paragraph" className="mt-2 text-gray-600 text-center">
                             {errorMessage || "예기치 않은 오류가 발생했습니다. 나중에 다시 시도해 주세요."}
                         </Typography>
                         {errorCode && (
-                            <Typography variant="body2" className="mt-2 text-gray-600 text-center">
+                            <Typography variant="small" className="mt-2 text-gray-600 text-center">
                                 <strong>에러 코드:</strong> {errorCode}
                             </Typography>
                         )}

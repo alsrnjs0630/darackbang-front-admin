@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import loginSlice from "./reducer/loginSlice";
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'; // Use local storage
+import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist/es/constants';
 
 import { encryptTransform } from 'redux-persist-transform-encrypt';
 
@@ -29,6 +30,12 @@ const store = configureStore({
     reducer: {
         loginSlice: persistedReducer, // Apply persisted reducer
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: {
+            // redux-persist 관련 비직렬화된 액션 무시
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        },
+    }),
 });
 
 const persistor = persistStore(store);
