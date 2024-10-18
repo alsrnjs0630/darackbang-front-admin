@@ -29,7 +29,7 @@ const ProductQuarterComponent = () => {
 
 
     const chartData = [
-        ['product Name', 'Total Amount'],
+        ['상품명', '총구매액'],
         ...data.map(item => [item.productName, parseFloat(item.totalAmount)]),
     ];
 

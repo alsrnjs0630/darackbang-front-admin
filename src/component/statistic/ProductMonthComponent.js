@@ -29,7 +29,7 @@ const ProductMonthComponent = () => {
 
 
     const chartData = [
-        ['productName', 'Total Amount'],
+        ['상품명', '총구매액'],
         ...data.map(item => [String(item.productName), parseFloat(item.totalAmount)]),
     ];
 

@@ -21,8 +21,8 @@ const AgeTotalComponent = () => {
 
 
     const chartData = [
-        ['Age Group', 'Total Amount'],
-        ...data.map(item => [String(item.ageGroup), parseFloat(item.totalAmount)]),
+        ['연령대', '총구매액'],
+        ...data.map(item => [String(item.ageGroup)+'대', parseFloat(item.totalAmount)]),
     ];
 
     const options = {
