@@ -6,9 +6,6 @@ import useCustomHook from "../hooks/useCustomHook";
 
 const ProductMonthComponent = () => {
 
-    const {exceptionHandler} = useCustomHook()
-
-
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
     const currentMonth = new Date().getMonth() + 1; // Months are zero-indexed
@@ -16,6 +13,8 @@ const ProductMonthComponent = () => {
     const [year, setYear] = useState(currentYear); // Default year
     const [month, setMonth] = useState(currentMonth);
     const [data, setData] = useState([]);
+
+    const {exceptionHandler} = useCustomHook()
 
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
     useEffect(() => {
@@ -84,7 +83,6 @@ const ProductMonthComponent = () => {
                         onChange={onMonthChange}
                         className="w-full p-2 border border-gray-300 rounded"
                     >
-                        {/* Generate months dynamically based on selected year */}
                         {[...Array(year === currentYear ? currentMonth : 12)].map((_, index) => (
                             <option key={index + 1} value={index + 1}>
                                 {index + 1}월
