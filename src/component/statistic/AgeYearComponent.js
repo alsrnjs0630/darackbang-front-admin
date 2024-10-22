@@ -2,11 +2,12 @@ import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 
 import {getAgeGroupYearStat} from "../../api/statisticApi";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
+
 
 const AgeYearComponent = () => {
 
-    const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandler} = useCustomHook()
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
@@ -17,9 +18,8 @@ const AgeYearComponent = () => {
     useEffect(() => {
         getAgeGroupYearStat(year).then(data => {
             setData(data);
-            console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
     }, [year]);
 
@@ -38,7 +38,7 @@ const AgeYearComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
     };
 

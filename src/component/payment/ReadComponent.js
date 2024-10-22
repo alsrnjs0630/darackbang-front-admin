@@ -7,8 +7,8 @@ import {
 
 import {getOne} from "../../api/paymentApi"
 
-import useCustomMove from "../hooks/useCustomMove";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
+
 import PropTypes from 'prop-types';
 const initState = {
     id: null,
@@ -76,9 +76,7 @@ const initState = {
 
 const ReadComponent = ({id}) => {
 
-    const {exceptionHandle} = useCustomLogin()
-
-    const {page, size, refresh, moveToList} = useCustomMove()
+    const {moveToList,exceptionHandler} = useCustomHook()
 
     const [payment, setPayment] = useState(initState);
 
@@ -87,7 +85,7 @@ const ReadComponent = ({id}) => {
             console.log("결제 정보:{}", data);
             setPayment(data);
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     }, [id])

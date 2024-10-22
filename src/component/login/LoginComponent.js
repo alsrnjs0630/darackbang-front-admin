@@ -3,13 +3,13 @@ import {Input, Button, Card, CardBody, Dialog, DialogHeader, DialogBody, DialogF
 import {authLogin} from "../../api/loginApi";
 import {useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
 import {login} from "../../reducer/loginSlice";
 
 const LoginComponent = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandler} = useCustomHook()
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -28,7 +28,7 @@ const LoginComponent = () => {
                 dispatch(login(data));
             }
         }).catch(error => {
-            exceptionHandle(error);
+            exceptionHandler(error);
         });
     };
 

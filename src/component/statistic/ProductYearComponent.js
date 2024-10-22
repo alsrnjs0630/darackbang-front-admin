@@ -2,11 +2,11 @@ import { Chart } from 'react-google-charts';
 import {useEffect, useState} from "react";
 
 import {getProductYearStat} from "../../api/statisticApi";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
 
 const ProductYearComponent = () => {
 
-    const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandler} = useCustomHook()
 
 
     const currentDate = new Date();
@@ -21,7 +21,7 @@ const ProductYearComponent = () => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
     }, [year]);
 
@@ -31,7 +31,6 @@ const ProductYearComponent = () => {
         ...data.map(item => [String(item.productName), parseFloat(item.totalAmount)]),
     ];
 
-
     const onYearChange = (e) => {
 
         const selectedYear = Number(e.target.value);
@@ -39,9 +38,8 @@ const ProductYearComponent = () => {
 
         getProductYearStat(selectedYear).then(data => {
             setData(data);
-            console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     };

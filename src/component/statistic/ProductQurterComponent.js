@@ -2,11 +2,11 @@ import { Chart } from 'react-google-charts';
 import {useEffect, useState} from 'react';
 
 import { getProductQuarterStat} from "../../api/statisticApi";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
 
 const ProductQuarterComponent = () => {
 
-    const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandler} = useCustomHook()
 
 
     const currentDate = new Date();
@@ -21,9 +21,8 @@ const ProductQuarterComponent = () => {
     useEffect(() => {
         getProductQuarterStat(year,quarter).then(data => {
             setData(data);
-            console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
     }, [year,quarter]);
 

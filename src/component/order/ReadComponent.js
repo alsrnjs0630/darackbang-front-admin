@@ -7,8 +7,8 @@ import {
 
 import {getOne} from "../../api/orderApi"
 
-import useCustomMove from "../hooks/useCustomMove";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
+
 import PropTypes from 'prop-types';
 
 const initState = {
@@ -24,9 +24,7 @@ const initState = {
 
 const ReadComponent = ({id}) => {
 
-    const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
-
-    const {exceptionHandle} = useCustomLogin()
+    const { moveToList, exceptionHandler} = useCustomHook()
 
     const [order, setOrder] = useState(initState);
 
@@ -35,7 +33,7 @@ const ReadComponent = ({id}) => {
             console.log(data);
             setOrder(data);
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     }, [id])

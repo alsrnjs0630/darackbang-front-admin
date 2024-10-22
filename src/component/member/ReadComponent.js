@@ -16,8 +16,8 @@ import {
     withdrawMember
 } from "../../api/memberApi";
 import { useDaumPostcodePopup } from 'react-daum-postcode';
-import useCustomMove from "../hooks/useCustomMove";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
+
 import PropTypes from 'prop-types';
 
 
@@ -47,13 +47,13 @@ const initState = {
 
 const ReadComponent = ({ id }) => {
 
-    const {exceptionHandle} = useCustomLogin()
-
     const [modalOpen, setModalOpen] = useState(false);
     const [modalMessage, setModalMessage] = useState("");
     const [confirmAction, setConfirmAction] = useState(null); // Action for confirm modals
     const [member, setMember] = useState(initState);
-    const { moveToList } = useCustomMove();
+
+    const { moveToList,exceptionHandler } = useCustomHook();
+    
     const open = useDaumPostcodePopup('https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js');
 
     const handleModalOpen = (message, confirmAction = null) => {
@@ -71,7 +71,7 @@ const ReadComponent = ({ id }) => {
         getOne(id)
             .then(data => setMember(data))
             .catch(error => {
-                exceptionHandle(error)
+                exceptionHandler(error)
             });
     }, [id]);
 
@@ -163,7 +163,7 @@ const ReadComponent = ({ id }) => {
                 }
             })
             .catch(error => {
-                exceptionHandle(error)
+                exceptionHandler(error)
             });
 
     };
@@ -180,7 +180,7 @@ const ReadComponent = ({ id }) => {
                     }
                 })
                 .catch(error => {
-                    exceptionHandle(error)
+                    exceptionHandler(error)
                 });
         };
         handleModalOpen("사용자를 탈퇴 처리 하시겠습니까?", withdrawAction);
@@ -197,7 +197,7 @@ const ReadComponent = ({ id }) => {
                     }
                 })
                 .catch(error => {
-                    exceptionHandle(error)
+                    exceptionHandler(error)
                 });
         };
         handleModalOpen("사용자를 블랙컨슈머로 지정하시겠습니까?", blacklistAction);
@@ -214,7 +214,7 @@ const ReadComponent = ({ id }) => {
                     }
                 })
                 .catch(error => {
-                    exceptionHandle(error)
+                    exceptionHandler(error)
                 });
         };
         handleModalOpen("사용자를 블랙컨슈머에서 해제하시겠습니까?", deBlacklistAction);
@@ -231,7 +231,7 @@ const ReadComponent = ({ id }) => {
                     }
                 })
                 .catch(error => {
-                    exceptionHandle(error)
+                    exceptionHandler(error)
                 });
         };
         handleModalOpen("삭제처리한 사용자를 복구 하시겠습니까?", activateAction);

@@ -5,10 +5,10 @@ import '../../pages/product/ProductList.css'; // Add your custom CSS
 import {
     create
 } from "../../api/productApi";
-import useCustomMove from "../hooks/useCustomMove";
+import useCustomHook from "../hooks/useCustomHook";
 import {Input, Textarea, Select, Option} from "@material-tailwind/react";
 import {Dialog, DialogHeader, DialogBody, DialogFooter, Button} from "@material-tailwind/react";
-import useCustomLogin from "../hooks/useCustomLogin";
+
 
 const CreateComponent = () => {
     const [product, setProduct] = useState({
@@ -38,9 +38,7 @@ const CreateComponent = () => {
         wishCount: ""
     });
 
-    const {exceptionHandle} = useCustomLogin()
-
-    const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
+    const { moveToList, exceptionHandler} = useCustomHook()
     // Other state variables
     const [files, setFiles] = useState([]);
     const [descImages, setDescImages] = useState([]);
@@ -243,7 +241,7 @@ const CreateComponent = () => {
                 openModal("상품 생성에 실패했습니다.");
             }
         }).catch(error => {
-            exceptionHandle(error);
+            exceptionHandler(error);
         });
 
     };

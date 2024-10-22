@@ -14,14 +14,15 @@ import {Outlet, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../reducer/loginSlice";
 import {authLogout} from "../api/loginApi";
-import useCustomLogin from "../component/hooks/useCustomLogin";
+import useCustomHook from "../component/hooks/useCustomHook";
 import {persistor} from '../store'; // Import the persistor
+import { FaHome, FaBoxOpen, FaUsers, FaShoppingCart, FaCreditCard, FaChartLine } from "react-icons/fa"; // 아이콘 임포트
 
 const BasicLayout = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const {exceptionHandle} = useCustomLogin()
+    const {exceptionHandler} = useCustomHook()
 
     const [selectedItem, setSelectedItem] = useState(null); // 선택된 항목 상태 관리
 
@@ -70,7 +71,7 @@ const BasicLayout = () => {
                 }
             })
             .catch(error => {
-                exceptionHandle(error)
+                exceptionHandler(error)
             });
 
     };
@@ -97,12 +98,24 @@ const BasicLayout = () => {
                     <List className="flex-grow">
                         <ListItem
                             className={`${
+                                selectedItem === "홈" ? "bg-gray-200 font-bold" : ""
+                            }`}
+                            onClick={() =>
+                                handleNavigation("/dashboard/statistics/all", "홈")
+                            }
+                        >
+                            <FaHome className="mr-2" /> {/* 홈 아이콘 */}
+                            홈
+                        </ListItem>
+                        <ListItem
+                            className={`${
                                 selectedItem === "상품관리" ? "bg-gray-200 font-bold" : ""
                             }`}
                             onClick={() =>
                                 handleNavigation("/dashboard/products/list", "상품관리")
                             }
                         >
+                            <FaBoxOpen className="mr-2" /> {/* 상품관리 아이콘 */}
                             상품관리
                         </ListItem>
                         <ListItem
@@ -113,6 +126,7 @@ const BasicLayout = () => {
                                 handleNavigation("/dashboard/members/list", "회원관리")
                             }
                         >
+                            <FaUsers className="mr-2" /> {/* 회원관리 아이콘 */}
                             회원관리
                         </ListItem>
                         <ListItem
@@ -123,6 +137,7 @@ const BasicLayout = () => {
                                 handleNavigation("/dashboard/orders/list", "구매관리")
                             }
                         >
+                            <FaShoppingCart className="mr-2" /> {/* 구매관리 아이콘 */}
                             구매관리
                         </ListItem>
                         <ListItem
@@ -133,6 +148,7 @@ const BasicLayout = () => {
                                 handleNavigation("/dashboard/payments/list", "결제관리")
                             }
                         >
+                            <FaCreditCard className="mr-2" /> {/* 결제관리 아이콘 */}
                             결제관리
                         </ListItem>
                         <ListItem
@@ -143,9 +159,11 @@ const BasicLayout = () => {
                                 handleNavigation("/dashboard/statistics/all", "매출통계관리")
                             }
                         >
+                            <FaChartLine className="mr-2" /> {/* 매출통계관리 아이콘 */}
                             매출통계관리
                         </ListItem>
                     </List>
+
 
                     <div className="mt-4 p-4 flex flex-col items-center">
                         {loginState.isLogin ? (

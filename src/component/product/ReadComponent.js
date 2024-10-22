@@ -8,8 +8,8 @@ import {Dialog, DialogHeader, DialogBody, DialogFooter} from "@material-tailwind
 
 import {API_SERVER_HOST} from "../../api/host";
 
-import useCustomMove from "../hooks/useCustomMove";
-import useCustomLogin from "../hooks/useCustomLogin";
+import useCustomHook from "../hooks/useCustomHook";
+
 import PropTypes from 'prop-types';
 
 const initState = {
@@ -49,7 +49,7 @@ const ReadComponent = ({id}) => {
 
     console.log("아이티::::::::::{}", id)
 
-    const {   moveToList,  } = useCustomMove()
+    const {   moveToList,exceptionHandler  } = useCustomHook()
     // 다른 상태 변수들
     const [files, setFiles] = useState([]);
     const [descImages, setDescImages] = useState([]);
@@ -59,8 +59,6 @@ const ReadComponent = ({id}) => {
     const [descFileDropping, setDescFileDropping] = useState(null);
 
     const [product, setProduct] = useState(initState);
-
-    const {exceptionHandle} = useCustomLogin()
 
     // 모달 상태 관리
     const [modalOpen, setModalOpen] = useState(false);
@@ -249,7 +247,7 @@ const ReadComponent = ({id}) => {
             }
 
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     };
@@ -284,7 +282,7 @@ const ReadComponent = ({id}) => {
             setFiles(infoImages);
             setDescImages(descImages);
         }).catch(error=>{
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     }, [id])
@@ -303,7 +301,7 @@ const ReadComponent = ({id}) => {
                 }
 
             }).catch(error => {
-                exceptionHandle(error)
+                exceptionHandler(error)
             });
 
         });
@@ -323,7 +321,7 @@ const ReadComponent = ({id}) => {
                 }
 
             }).catch(error => {
-                exceptionHandle(error)
+                exceptionHandler(error)
             });
 
         });

@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
-import useCustomMove from "../hooks/useCustomMove";
+import useCustomHook from "../hooks/useCustomHook";
 import {getList} from "../../api/productApi";
 import PageComponent from "../common/PageComponent";
-import useCustomLogin from "../hooks/useCustomLogin";
+
 
 
 const initState = {
@@ -21,9 +21,7 @@ const initState = {
 
 const ListComponent = () => {
 
-    const {exceptionHandle} = useCustomLogin()
-
-    const {page, size, refresh, moveToList, moveToRead, moveToCreate} = useCustomMove()
+    const { page,size,refresh,moveToList, moveToRead, moveToCreate,exceptionHandler} = useCustomHook()
 
     const [serverData, setServerData] = useState(initState)
 
@@ -46,7 +44,7 @@ const ListComponent = () => {
             setServerData(data);
 
         }).catch(error => {
-            exceptionHandle(error)
+            exceptionHandler(error)
         });
 
     }, [page, size, refresh, searchValue, searchType]);
@@ -66,7 +64,7 @@ const ListComponent = () => {
             setServerData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
-            exceptionHandle(error);
+            exceptionHandler(error);
         });
     };
 
