@@ -35,7 +35,8 @@ const ProductMonthComponent = () => {
     const onMonthChange = (e) => {
         const selectedMonth = Number(e.target.value);
         setMonth(selectedMonth);
-        getProductMonthStat(year,month).then(data => {
+
+        getProductMonthStat(year,selectedMonth).then(data => {
             setData(data);
             console.log("Search results:", data); // Output the data to console
         }).catch(error => {
