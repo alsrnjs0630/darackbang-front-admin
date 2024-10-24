@@ -109,7 +109,7 @@ const ListComponent = () => {
             </div>
 
             <Carousel
-                className="rounded-2xl"
+                className="w-full h-auto rounded-2xl" // Full width and auto height
                 loop={true}
                 prevArrow={({ handlePrev }) => (
                     <button
@@ -163,7 +163,7 @@ const ListComponent = () => {
                         <img
                             key={analyze.id}
                             src={`${API_SERVER_HOST}/admin/analyzes/view/${analyze.fileName}`}
-                            className="w-full h-full rounded-2xl object-cover"
+                            className="w-screen h-screen rounded-2xl object-contain"
                             alt={analyze.fileName}
                         />
                         <div className="flex justify-between mt-2 space-x-4"> {/* 간격 설정 */}
@@ -178,7 +178,7 @@ const ListComponent = () => {
             {/* Modal for viewing image */}
             {selectedImage && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
-                    <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="relative w-screen h-screen flex items-center justify-center">
                         {/* Close Button */}
                         <button
                             onClick={closeImageModal}
