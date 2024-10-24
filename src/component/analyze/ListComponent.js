@@ -121,7 +121,10 @@ const ListComponent = () => {
                             className="w-full h-full rounded-2xl object-cover"
                             alt={analyze.fileName}
                         />
-                        <span>{formatDate(analyze.createdDate)}</span>
+                        <div className="flex justify-between mt-2 space-x-4"> {/* 간격 설정 */}
+                            <span>{analyze.fileName}</span>
+                            <span>{formatDate(analyze.createdDate)}</span>
+                        </div>
                     </div>
                 ))}
             </Carousel>
@@ -144,7 +147,7 @@ const ListComponent = () => {
                             className="w-auto h-auto max-h-full max-w-full rounded-2xl"
                         />
                         <p className="absolute bottom-10 text-white text-center text-lg">
-                            {formatDate(selectedImage.createdDate)}
+                            {selectedImage.fileName}
                         </p>
                     </div>
                 </div>
