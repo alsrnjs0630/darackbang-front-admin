@@ -13,23 +13,13 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
 
     const handleError = () => {
 
-        if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED') {
+        if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' || errorCode === 'ERR_NETWORK') {
             dispatch(logout()); // Redux에서 로그아웃 처리
             persistor.flush();
             persistor.purge();
             localStorage.removeItem('persist:root'); // 필요시 키를 조정
             navigate({pathname: '/', search: errorMessage});
             return;
-        }
-
-        if (errorCode === 'ERR_NETWORK') {
-            dispatch(logout()); // Redux에서 로그아웃 처리
-            // 진행 중인 persist 작업을 먼저 flush
-            persistor.flush();
-            // redux-persist에서 유지된 상태를 purge
-            persistor.purge();
-            // localStorage에서 유지된 상태를 삭제
-            localStorage.removeItem('persist:root'); // 필요시 키를 조정
         }
 
         navigate(-1); // 이전 페이지로 이동
@@ -72,7 +62,7 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
                             color="red"
                             className="mt-6 w-full"
                         >
-                            {errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ? '로그인' : '돌아가기'}
+                            {(errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ||errorCode === 'ERR_NETWORK') ? '로그인' : '돌아가기'}
                         </Button>
                     </div>
                 </div>
