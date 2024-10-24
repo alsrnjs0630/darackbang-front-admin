@@ -108,7 +108,7 @@ const ListComponent = () => {
                 </div>
             </div>
 
-            <Carousel className="rounded-2xl">
+            <Carousel className="rounded-2xl" loop={true}>
                 {serverData.contents.map((analyze) => (
                     <div
                         key={analyze.id}
