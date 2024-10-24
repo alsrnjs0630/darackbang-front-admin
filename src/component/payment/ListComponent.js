@@ -24,7 +24,7 @@ const ListComponent = () => {
     const [serverData, setServerData] = useState(initState)
 
     // State to track which search field (productName or salePrice) is selected
-    const [searchType, setSearchType] = useState("userEmail"); // Default to productName
+    const [searchType, setSearchType] = useState("buyerName"); // Default to productName
     const [searchValue, setSearchValue] = useState(""); // Value entered in the input field
 
 
@@ -100,7 +100,7 @@ const ListComponent = () => {
                     {searchType === "buyerName" || searchType === "paidAmount" ? (
                         <input
                             type="text"
-                            placeholder={`${searchType === "paidAmount" ? "구매자명" : "구매액"}`}
+                            placeholder={`${searchType === "paidAmount" ? "구매액" : "구매자명"}`}
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             className="border px-2 py-1 rounded"
