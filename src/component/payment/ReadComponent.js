@@ -197,9 +197,13 @@ const ReadComponent = ({id}) => {
                         </div>
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">결제금액</label>
+                        <label className="block text-sm font-medium text-gray-700">결제금액
+                            <span className="text-xs text-gray-500 ml-1">
+            (* 3만원이하는 상품결제금액에 배송비 3000원 포함)
+        </span>
+                        </label>
                         <div className="mt-1 p-2 border border-gray-300 rounded-md bg-white">
-                            {payment.paidAmount===null?"해당정보없음":payment.paidAmount}
+                        {payment.paidAmount===null?"해당정보없음":payment.paidAmount}
                         </div>
                     </div>
                     <div>
