@@ -8,15 +8,15 @@ const ProductMonthComponent = () => {
 
     const currentDate = new Date();
     const currentYear = currentDate.getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // Months are zero-indexed
+    const currentMonth = new Date().getMonth() + 1;
 
-    const [year, setYear] = useState(currentYear); // Default year
+    const [year, setYear] = useState(currentYear);
     const [month, setMonth] = useState(currentMonth);
     const [data, setData] = useState([]);
 
     const {exceptionHandler} = useCustomHook()
 
-    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+
     useEffect(() => {
         getProductMonthStat(year,month).then(data => {
             setData(data);
@@ -38,7 +38,7 @@ const ProductMonthComponent = () => {
 
         getProductMonthStat(year,selectedMonth).then(data => {
             setData(data);
-            console.log("Search results:", data); // Output the data to console
+            console.log("Search results:", data);
         }).catch(error => {
             exceptionHandler(error)
         });

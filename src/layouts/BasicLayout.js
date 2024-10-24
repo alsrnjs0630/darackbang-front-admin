@@ -16,7 +16,7 @@ import {logout} from "../reducer/loginSlice";
 import {authLogout} from "../api/loginApi";
 import useCustomHook from "../component/hooks/useCustomHook";
 import {persistor} from '../store'; // Import the persistor
-import { FaHome, FaBoxOpen, FaUsers, FaShoppingCart, FaCreditCard, FaChartLine } from "react-icons/fa"; // 아이콘 임포트
+import {FaHome, FaBoxOpen, FaUsers, FaShoppingCart, FaCreditCard, FaChartLine, FaSearch} from "react-icons/fa"; // 아이콘 임포트
 
 const BasicLayout = () => {
     const navigate = useNavigate();
@@ -161,6 +161,17 @@ const BasicLayout = () => {
                         >
                             <FaChartLine className="mr-2" /> {/* 매출통계관리 아이콘 */}
                             매출통계관리
+                        </ListItem>
+                        <ListItem
+                            className={`${
+                                selectedItem === "이미지분석관리" ? "bg-gray-200 font-bold" : ""
+                            }`}
+                            onClick={() =>
+                                handleNavigation("/dashboard/analyzes/list", "이미지분석관리")
+                            }
+                        >
+                            <FaSearch  className="mr-2" /> {/* 매출통계관리 아이콘 */}
+                            이미지분석관리
                         </ListItem>
                     </List>
 
