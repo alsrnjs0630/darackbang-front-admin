@@ -108,7 +108,52 @@ const ListComponent = () => {
                 </div>
             </div>
 
-            <Carousel className="rounded-2xl" loop={true}>
+            <Carousel
+                className="rounded-2xl"
+                loop={true}
+                prevArrow={({ handlePrev }) => (
+                    <button
+                        onClick={handlePrev}
+                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full opacity-80 hover:opacity-100 focus:outline-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
+                    </button>
+                )}
+                nextArrow={({ handleNext }) => (
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full opacity-80 hover:opacity-100 focus:outline-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
+                )}
+            >
                 {serverData.contents.map((analyze) => (
                     <div
                         key={analyze.id}
@@ -128,6 +173,7 @@ const ListComponent = () => {
                     </div>
                 ))}
             </Carousel>
+
 
             {/* Modal for viewing image */}
             {selectedImage && (
