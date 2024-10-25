@@ -10,6 +10,7 @@ import statisticsRouter from "./statisticsRouter";
 import PrivateRouter from "./PrivateRouter";
 import ErrorPage from "../pages/error/ErrorPage";
 import analyzeRouter from "./analyzeRouter";
+import eventRouter from "./eventRouter";
 
 // Loading 컴포넌트를 함수로 정의
 const Loading = () => <div>Loading...</div>;
@@ -52,6 +53,10 @@ const root = createBrowserRouter([
             {
                 path: "analyzes",
                 children: analyzeRouter(),
+            },
+            {
+                path: "events",
+                children: eventRouter(),
             },
         ],
     },

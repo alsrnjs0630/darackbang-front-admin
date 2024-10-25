@@ -131,6 +131,17 @@ const BasicLayout = () => {
                         </ListItem>
                         <ListItem
                             className={`${
+                                selectedItem === "이벤트관리" ? "bg-gray-200 font-bold" : ""
+                            }`}
+                            onClick={() =>
+                                handleNavigation("/dashboard/events/list", "이벤트관리")
+                            }
+                        >
+                            <FaUsers className="mr-2" /> {/* 회원관리 아이콘 */}
+                            이벤트관리
+                        </ListItem>
+                        <ListItem
+                            className={`${
                                 selectedItem === "구매관리" ? "bg-gray-200 font-bold" : ""
                             }`}
                             onClick={() =>
