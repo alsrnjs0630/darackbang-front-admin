@@ -11,6 +11,9 @@ const getNum = (param, defaultValue) => {
 
 const useCustomHook = () => {
 
+    const [lastError, setLastError] = useState(null); // 마지막 에러 정보를 저장하는 상태
+
+
     const navigate = useNavigate()
 
     const [refresh, setRefresh] = useState(false)
@@ -72,11 +75,24 @@ const useCustomHook = () => {
 
         const httpStatusCode = exception.response != null ? exception.response.status : exception.code; // 서버에서 반환된 HTTP 상태 코드
         const errorMsg = exception.response != null ? exception.response.data.error : exception.message;
+
+        // 이전에 처리한 에러와 동일한 에러인지 확인
+        if (lastError && lastError.code === httpStatusCode && lastError.message === errorMsg) {
+            return; // 동일한 에러라면 추가 처리하지 않음
+        }
+
+        // 다른 에러가 발생하면 상태를 초기화
+        if (lastError && (lastError.code !== httpStatusCode || lastError.message !== errorMsg)) {
+            setLastError(null); // 상태 초기화
+        }
+
         const errorStr = createSearchParams({error: errorMsg}).toString();
 
         //나머지 에러 처리 페이지로 이동
         navigate("/error", {state: {errorMessage: errorStr, errorCode: httpStatusCode}});
 
+        // 처리한 에러 정보를 저장
+        setLastError({ code: httpStatusCode, message: errorMsg });
     }
 
 

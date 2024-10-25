@@ -24,7 +24,7 @@ const ListComponent = () => {
     const [serverData, setServerData] = useState(initState)
 
     // State to track which search field (productName or salePrice) is selected
-    const [searchType, setSearchType] = useState("userEmail"); // Default to productName
+    const [searchType, setSearchType] = useState("buyerName"); // Default to productName
     const [searchValue, setSearchValue] = useState(""); // Value entered in the input field
 
 
@@ -100,7 +100,7 @@ const ListComponent = () => {
                     {searchType === "buyerName" || searchType === "paidAmount" ? (
                         <input
                             type="text"
-                            placeholder={`${searchType === "paidAmount" ? "구매자명" : "구매액"}`}
+                            placeholder={`${searchType === "paidAmount" ? "구매액" : "구매자명"}`}
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
                             className="border px-2 py-1 rounded"
@@ -138,6 +138,9 @@ const ListComponent = () => {
 
 
             {/* Header 부분 */}
+            <div className="mb-2 text-sm text-right text-gray-600">
+                (* 3만원이하는 상품결제금액에 배송비 3000원 포함)
+            </div>
             <div className="p-4 bg-blue-500 text-white">
                 <div className="grid grid-cols-8 gap-4 font-bold">
                     <span>번호</span>

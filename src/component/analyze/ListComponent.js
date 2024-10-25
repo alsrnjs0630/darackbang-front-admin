@@ -108,7 +108,52 @@ const ListComponent = () => {
                 </div>
             </div>
 
-            <Carousel className="rounded-2xl">
+            <Carousel
+                className="w-full h-auto rounded-2xl" // Full width and auto height
+                loop={true}
+                prevArrow={({ handlePrev }) => (
+                    <button
+                        onClick={handlePrev}
+                        className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full opacity-80 hover:opacity-100 focus:outline-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M15 19l-7-7 7-7"
+                            />
+                        </svg>
+                    </button>
+                )}
+                nextArrow={({ handleNext }) => (
+                    <button
+                        onClick={handleNext}
+                        className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full opacity-80 hover:opacity-100 focus:outline-none"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="2"
+                            stroke="currentColor"
+                            className="w-6 h-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M9 5l7 7-7 7"
+                            />
+                        </svg>
+                    </button>
+                )}
+            >
                 {serverData.contents.map((analyze) => (
                     <div
                         key={analyze.id}
@@ -118,18 +163,22 @@ const ListComponent = () => {
                         <img
                             key={analyze.id}
                             src={`${API_SERVER_HOST}/admin/analyzes/view/${analyze.fileName}`}
-                            className="w-full h-full rounded-2xl object-cover"
+                            className="w-screen h-screen rounded-2xl object-contain"
                             alt={analyze.fileName}
                         />
-                        <span>{formatDate(analyze.createdDate)}</span>
+                        <div className="flex justify-between mt-2 space-x-4"> {/* 간격 설정 */}
+                            <span>{analyze.fileName}</span>
+                            <span>{formatDate(analyze.createdDate)}</span>
+                        </div>
                     </div>
                 ))}
             </Carousel>
 
+
             {/* Modal for viewing image */}
             {selectedImage && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90">
-                    <div className="relative w-full h-full flex items-center justify-center">
+                    <div className="relative w-screen h-screen flex items-center justify-center">
                         {/* Close Button */}
                         <button
                             onClick={closeImageModal}
@@ -144,7 +193,7 @@ const ListComponent = () => {
                             className="w-auto h-auto max-h-full max-w-full rounded-2xl"
                         />
                         <p className="absolute bottom-10 text-white text-center text-lg">
-                            {formatDate(selectedImage.createdDate)}
+                            {selectedImage.fileName}
                         </p>
                     </div>
                 </div>
