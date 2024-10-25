@@ -13,7 +13,7 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
 
     const handleError = () => {
 
-        if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' || errorCode === 'ERR_NETWORK') {
+        if (errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' || errorCode === 'ERR_NETWORK' || errorCode === '401') {
             dispatch(logout()); // Redux에서 로그아웃 처리
             persistor.flush();
             persistor.purge();
@@ -62,7 +62,7 @@ const ErrorComponent = ({errorMessage, errorCode}) => {
                             color="red"
                             className="mt-6 w-full"
                         >
-                            {(errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ||errorCode === 'ERR_NETWORK') ? '로그인' : '돌아가기'}
+                            {(errorMessage === 'REQUIRE_LOGIN' || errorMessage === 'ACCESSDENIED' ||errorCode === 'ERR_NETWORK'||errorCode === '401') ? '로그인' : '돌아가기'}
                         </Button>
                     </div>
                 </div>
