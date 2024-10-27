@@ -1,21 +1,24 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDropzone} from "react-dropzone";
 import '../../pages/product/ProductList.css'; // Add your custom CSS
 import {create} from "../../api/eventApi";
 import useCustomHook from "../hooks/useCustomHook";
 import {Input, Textarea, Select, Option} from "@material-tailwind/react";
 import {Dialog, DialogHeader, DialogBody, DialogFooter, Button} from "@material-tailwind/react";
+import {getOne} from "../../api/eventApi";
+import {API_SERVER_HOST} from "../../api/host";
 
-const CreateComponent = () => {
+const CreateComponent = ({id}) => {
     const [event, setEvent] = useState({
         title: "",
         contents: "",
         eventState: "",
+        fileName: "",
         startDate: "",
         endDate: "",
     });
 
-    const { moveToList, exceptionHandler } = useCustomHook();
+    const {moveToList, exceptionHandler} = useCustomHook();
     const [files, setFiles] = useState();
 
     // 모달 상태 관리
@@ -42,7 +45,7 @@ const CreateComponent = () => {
         return (size / Math.pow(1024, i)).toFixed(2) + " " + ["B", "kB", "MB", "GB", "TB"][i];
     };
 
-    const removeFile = ( index, event) => {
+    const removeFile = (index, event) => {
         event.stopPropagation();
 
         const updatedFiles = [...files];
@@ -53,19 +56,19 @@ const CreateComponent = () => {
 
     const onDrop = (acceptedFiles) => {
         const newFiles = acceptedFiles.map((file) =>
-            Object.assign(file, { preview: URL.createObjectURL(file) })
+            Object.assign(file, {preview: URL.createObjectURL(file)})
         );
         setFiles(newFiles);
     };
 
-    const { getRootProps: getMainDropzoneProps, getInputProps: getMainInputProps } = useDropzone({
+    const {getRootProps: getMainDropzoneProps, getInputProps: getMainInputProps} = useDropzone({
         onDrop,
-        accept: { "image/*": [] },
+        accept: {"image/*": []},
         multiple: false,
     });
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setEvent({
             ...event,
             [name]: value
@@ -77,11 +80,11 @@ const CreateComponent = () => {
 
         // 필수 입력 필드 목록 (이름과 레이블을 함께 정의)
         const requiredFields = [
-            { name: 'title', label: '제목' },
-            { name: 'contents', label: '내용' },
-            { name: 'eventState', label: '이벤트 상태' },
-            { name: 'startDate', label: '이벤트 시작일' },
-            { name: 'endDate', label: '이벤트 마감일' },
+            {name: 'title', label: '제목'},
+            {name: 'contents', label: '내용'},
+            {name: 'eventState', label: '이벤트 상태'},
+            {name: 'startDate', label: '이벤트 시작일'},
+            {name: 'endDate', label: '이벤트 마감일'},
         ];
 
         // 각 필수 필드에 대해 값이 입력되었는지 확인
@@ -145,6 +148,23 @@ const CreateComponent = () => {
         });
     };
 
+    useEffect(() => {
+        getOne(id).then(data => {
+            console.log(data);
+            setEvent(data);
+            const images = {
+                preview: `${API_SERVER_HOST}/admin/events/view/${data.fileName || "default.png"}`,
+                name: data.fileName || "default.png",
+                size: 50000 // fileSize가 필요하다면 API에서 지원해야 함
+            }
+            console.log(images)
+            setFiles(images);
+        }).catch(error => {
+            exceptionHandler(error)
+        });
+
+    }, [id])
+
     return (
         <div className="bg-white p-7 rounded w-9/12 mx-auto">
             <form onSubmit={handleSubmit}>
@@ -202,7 +222,7 @@ const CreateComponent = () => {
                             label="이벤트 상태"
                             name="eventState"
                             value={event.eventState}
-                            onChange={(e) => setEvent({ ...event, eventState: e })}
+                            onChange={(e) => setEvent({...event, eventState: e})}
                             className="w-full"
                         >
                             <Option value="01">진행전</Option>
@@ -223,30 +243,29 @@ const CreateComponent = () => {
                         className="relative flex flex-col text-gray-400 border border-gray-200 border-dashed rounded cursor-pointer py-10 text-center"
                         onDragOver={(e) => e.preventDefault()}
                     >
-                        {files && files.length > 0 ? (
+                        {files && files.preview ? (
                             <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
-                                {files.map((file, index) => (
+                                <div
+                                    className="relative flex flex-col items-center overflow-hidden text-center bg-gray-100 border rounded cursor-default select-none"
+                                    style={{paddingTop: "100%", position: "relative"}}
+                                >
+                                    <img
+                                        src={files.preview}
+                                        className="absolute inset-0 object-cover w-full h-full"
+                                        alt={files.name}
+                                    />
                                     <div
-                                        key={index}
-                                        className="relative flex flex-col items-center overflow-hidden text-center bg-gray-100 border rounded cursor-default select-none"
-                                        style={{ paddingTop: "100%", position: "relative" }}
+                                        className="absolute bottom-0 left-0 right-0 bg-gray-800 text-white text-xs py-1"
                                     >
-                                        <img
-                                            src={file.preview}
-                                            className="absolute inset-0 object-cover w-full h-full"
-                                            alt={file.name}
-                                        />
-                                        <div className="absolute bottom-0 left-0 right-0 bg-gray-800 text-white text-xs py-1">
-                                            {file.name} ({eventImageFileSize(file.size)})
-                                            <button
-                                                onClick={(event) => removeFile( index, event)}
-                                                className="absolute top-0 right-0 m-1 text-sm text-red-500"
-                                            >
-                                                X
-                                            </button>
-                                        </div>
+                                        {files.name} ({eventImageFileSize(files.size) || 'Unknown Size'})
+                                        <button
+                                            onClick={(event) => removeFile(event)}
+                                            className="absolute top-0 right-0 m-1 text-sm text-red-500"
+                                        >
+                                            X
+                                        </button>
                                     </div>
-                                ))}
+                                </div>
                             </div>
                         ) : (
                             <p className="m-4">이벤트 이미지를 드래그하거나 클릭하여 추가하세요.</p>
@@ -254,12 +273,14 @@ const CreateComponent = () => {
                     </div>
                 </div>
 
-                <div className="flex justify-center mt-4">
-                    <button
-                        type="submit"
-                        className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out"
-                    >
-                        등록
+                {/* 제출 버튼 */}
+                <div className="flex justify-center items-center mt-4 space-x-4">
+                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded">
+                        수정
+                    </button>
+                    <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded"
+                            onClick={moveToList}>
+                        목록
                     </button>
                 </div>
             </form>

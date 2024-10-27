@@ -16,7 +16,16 @@ import {logout} from "../reducer/loginSlice";
 import {authLogout} from "../api/loginApi";
 import useCustomHook from "../component/hooks/useCustomHook";
 import {persistor} from '../store'; // Import the persistor
-import {FaHome, FaBoxOpen, FaUsers, FaShoppingCart, FaCreditCard, FaChartLine, FaSearch} from "react-icons/fa"; // 아이콘 임포트
+import {
+    FaHome,
+    FaBoxOpen,
+    FaUsers,
+    FaShoppingCart,
+    FaCreditCard,
+    FaChartLine,
+    FaSearch,
+    FaBirthdayCake
+} from "react-icons/fa"; // 아이콘 임포트
 
 const BasicLayout = () => {
     const navigate = useNavigate();
@@ -137,7 +146,7 @@ const BasicLayout = () => {
                                 handleNavigation("/dashboard/events/list", "이벤트관리")
                             }
                         >
-                            <FaUsers className="mr-2" /> {/* 회원관리 아이콘 */}
+                            <FaBirthdayCake className="mr-2" /> {/* 회원관리 아이콘 */}
                             이벤트관리
                         </ListItem>
                         <ListItem

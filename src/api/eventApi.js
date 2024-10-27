@@ -50,3 +50,17 @@ export const getList = async (pageParam) => {
         throw error; // 에러를 다시 던져 호출자가 처리할 수 있도록 함
     }
 }
+
+export const getOne = async (id) => {
+    try {
+        const res = await axios.get(`${prefix}/${id}`,{
+            withCredentials: true // 쿠키를 함께 전송하기 위해 withCredentials 설정
+        })
+
+        console.log("getOne :{}", res.data);
+        return res.data
+    } catch (error) {
+        console.error("이벤트 정보를 가져오는 중 오류가 발생했습니다:", error);
+        throw error; // 에러를 다시 던져 호출자가 처리할 수 있도록 함
+    }
+}

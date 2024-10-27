@@ -149,14 +149,13 @@ const ListComponent = () => {
                         <span>{event.id}</span>
                         <span>{event.title}</span>
                         <span>
-                {event.contents.length > 20 ? `${event.contents.slice(0, 20)}...` : event.contents}
-            </span>
+                            {event.contents.length > 20 ? `${event.contents.slice(0, 20)}...` : event.contents}
+                        </span>
                         <span>
-                {event.eventState === "02" ? "진행중" :
-                    event.eventState === "01" ? "진행준비" :
-                        event.eventState === "03" ? "마감" :
-                            "상태 없음"}
-            </span>
+                            {event.eventState === "02" ? "진행중" :
+                             event.eventState === "01" ? "진행준비" :
+                             event.eventState === "03" ? "마감" : "상태 없음"}
+                        </span>
                         <span>{formatDate(event.startDate)}</span>
                         <span>{formatDate(event.endDate)}</span>
                     </div>
