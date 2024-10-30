@@ -7,8 +7,9 @@ import {Input, Textarea, Select, Option} from "@material-tailwind/react";
 import {Dialog, DialogHeader, DialogBody, DialogFooter, Button} from "@material-tailwind/react";
 import {getOne} from "../../api/eventApi";
 import {API_SERVER_HOST} from "../../api/host";
+import {useParams} from "react-router-dom";
 
-const CreateComponent = ({id}) => {
+const CreateComponent = () => {
     const [event, setEvent] = useState({
         title: "",
         contents: "",
@@ -18,6 +19,7 @@ const CreateComponent = ({id}) => {
         endDate: "",
     });
 
+    const {id} = useParams();
     const {moveToList, exceptionHandler} = useCustomHook();
     const [files, setFiles] = useState();
 
@@ -155,7 +157,7 @@ const CreateComponent = ({id}) => {
             const images = {
                 preview: `${API_SERVER_HOST}/admin/events/view/${data.fileName || "default.png"}`,
                 name: data.fileName || "default.png",
-                size: 50000 // fileSize가 필요하다면 API에서 지원해야 함
+                size: 50000
             }
             console.log(images)
             setFiles(images);

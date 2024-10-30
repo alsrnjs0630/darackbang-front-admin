@@ -86,10 +86,8 @@ const CreateComponent = () => {
 
         // 각 필수 필드에 대해 값이 입력되었는지 확인
         for (let field of requiredFields) {
-            console.log("event:{}", event); // 디버깅을 위한 로그 출력
-            if (!event[field.name]) { // 필드 값이 비어있을 경우
-                console.log(field.name); // 디버깅을 위한 필드명 출력
-                console.log(field.label); // 디버깅을 위한 레이블 출력
+            console.log("event:{}", event);
+            if (!event[field.name]) {
                 openModal(`${field.label}을(를) 입력해야 합니다!`);
 
                 // 해당 필드에 포커스 설정
