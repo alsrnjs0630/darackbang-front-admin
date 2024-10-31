@@ -376,7 +376,7 @@ const ReadComponent = ({ id }) => {
                         ) : (
                             <Button className="w-full text-white rounded bg-red-500" onClick={handleBlackList}>블랙컨슈머 지정</Button>
                         )}
-                        {member.memberState === '01' ? (
+                        {(member.memberState === '01' || member.memberState === '03')  ? (
                             <Button className="w-full text-white rounded bg-red-500" onClick={handleWithdraw}>탈퇴처리</Button>
                         ) : (
                             <Button className="w-full text-white rounded bg-green-500" onClick={handleActive}>활성화</Button>
