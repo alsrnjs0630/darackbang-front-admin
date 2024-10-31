@@ -196,12 +196,26 @@ const CreateComponent = () => {
             }
         }
 
+        // 카테고리가 선택되었는지 확인
+        if (!product.category) {
+            openModal("카테고리를 선택해주세요.");
+            document.getElementsByName('category')[0].focus(); // 카테고리 선택 필드에 포커스 설정
+            return; // 카테고리가 선택되지 않은 경우 폼 제출 중지
+        }
+
         // 제조일자가 오늘 날짜보다 미래일 수 없음을 검사
         const today = new Date().toISOString().split('T')[0]; // 오늘 날짜를 YYYY-MM-DD 형식으로 가져옴
         if (product.manufactureDate > today) {
             openModal("제조일자는 오늘 날짜보다 미래일 수 없습니다.");
             document.getElementsByName('manufactureDate')[0].focus(); // 제조일자 입력 필드에 포커스 설정
             return; // 제조일자가 미래일 경우 폼 제출 중지
+        }
+
+        // 제조일자가 유통기한보다 이전 날짜여야 함을 검사
+        if (product.manufactureDate >= product.expirationDate) {
+            openModal("제조일자는 유통기한보다 이전이어야 합니다.");
+            document.getElementsByName('manufactureDate')[0].focus(); // 제조일자 입력 필드에 포커스 설정
+            return; // 제조일자가 유통기한보다 같거나 늦을 경우 폼 제출 중지
         }
 
         // 최소 한 개의 주요 상품 이미지가 업로드되었는지 확인
@@ -379,7 +393,7 @@ const CreateComponent = () => {
                     {/* 수량 */}
                     <div className="mb-4">
                         <Input
-                            type="text"
+                            type="number"
                             name="quantity"
                             label="수량"
                             value={product.quantity}
@@ -393,7 +407,7 @@ const CreateComponent = () => {
                     <div className="mb-4">
 
                         <Input
-                            type="text"
+                            type="number"
                             name="packageQuantity"
                             label="패키지 수량"
                             value={product.packageQuantity}

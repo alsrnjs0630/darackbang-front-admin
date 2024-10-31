@@ -194,6 +194,12 @@ const ReadComponent = ({id}) => {
             return; // 제조일자가 미래인 경우 폼 제출 중지
         }
 
+        if (product.manufactureDate >= product.expirationDate) {
+            openModal("제조일자는 유통기한보다 이전이어야 합니다.");
+            document.getElementsByName('manufactureDate')[0].focus(); // 제조일자 입력 필드에 포커스 설정
+            return; // 제조일자가 유통기한보다 같거나 늦을 경우 폼 제출 중지
+        }
+
         // 메인 상품 이미지 처리
         files.forEach((file, index) => {
             const sequenceNumber = index + 1; // 설명 이미지에 대한 순번 추가
@@ -449,15 +455,6 @@ const ReadComponent = ({id}) => {
                             onChange={handleInputChange}
                         />
                     </div>
-                   {/* 판매사 */}
-                    <div className="mb-4">
-                        <Input
-                            label="판매사"
-                            name="saleCompany"
-                            value={product.saleCompany === "null" ? "" : product.saleCompany}
-                            onChange={handleInputChange}
-                        />
-                    </div>
 
                     {/* 수량 */}
                     <div className="mb-4">
@@ -542,6 +539,8 @@ const ReadComponent = ({id}) => {
                         </Select>
                     </div>
 
+                    <div></div>
+
                     {/* 용량 (ml) */}
                     <div className="mb-4">
                         <Input
@@ -552,6 +551,17 @@ const ReadComponent = ({id}) => {
                             onChange={handleInputChange}
                         />
                     </div>
+
+                    {/* 판매사 */}
+                    <div className="mb-4">
+                        <Input
+                            label="판매사"
+                            name="saleCompany"
+                            value={product.saleCompany === "null" ? "" : product.saleCompany}
+                            onChange={handleInputChange}
+                        />
+                    </div>
+
                     {/* 주의 사항 */}
                     <div className="mb-4 md:col-span-4">
                         <Textarea
