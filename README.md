@@ -1,6 +1,4 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 빅데이터기반 인공지능 융합서비스 개발자 프로젝트 프론트 어드민
 
 ## Available Scripts
 
