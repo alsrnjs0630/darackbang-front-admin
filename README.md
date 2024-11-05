@@ -8,8 +8,6 @@
 
 Material Tailwind is an easy to use components library for Tailwind CSS and Material Design.
 
-> Actively supported by [Creative-Tim](https://www.creative-tim.com/?AFFILIATE=128200).
-
 ![Material Tailwind - Open-source UI library inspired by Material Design.](https://user-images.githubusercontent.com/51070104/204787709-560342fd-7dfd-4bc3-8b86-14da44030a85.png) 
 
 <br />
