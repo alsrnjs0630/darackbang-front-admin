@@ -11,6 +11,7 @@ import PrivateRouter from "./PrivateRouter";
 import ErrorPage from "../pages/error/ErrorPage";
 import analyzeRouter from "./analyzeRouter";
 import eventRouter from "./eventRouter";
+import noticeRouter from "./noticeRouter";
 
 // Loading 컴포넌트를 함수로 정의
 const Loading = () => <div>Loading...</div>;
@@ -57,6 +58,10 @@ const root = createBrowserRouter([
             {
                 path: "events",
                 children: eventRouter(),
+            },
+            {
+                path: "notices",
+                children: noticeRouter(),
             },
         ],
     },

@@ -24,7 +24,8 @@ import {
     FaCreditCard,
     FaChartLine,
     FaSearch,
-    FaBirthdayCake
+    FaBirthdayCake,
+    FaReadme
 } from "react-icons/fa"; // 아이콘 임포트
 
 const BasicLayout = () => {
@@ -148,6 +149,17 @@ const BasicLayout = () => {
                         >
                             <FaBirthdayCake className="mr-2" /> {/* 회원관리 아이콘 */}
                             이벤트관리
+                        </ListItem>
+                        <ListItem
+                            className={`${
+                                selectedItem === "공지사항관리" ? "bg-gray-200 font-bold" : ""
+                            }`}
+                            onClick={() =>
+                                handleNavigation("/dashboard/notices/list", "공지사항관리")
+                            }
+                        >
+                            <FaReadme className="mr-2" /> {/* 공지사항 아이콘 */}
+                            공지사항관리
                         </ListItem>
                         <ListItem
                             className={`${
